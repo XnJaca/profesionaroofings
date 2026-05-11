@@ -1,0 +1,272 @@
+/* ============================================================
+   Professional Roofing — global styles
+   Palette: deep navy + warm amber, clean and corporate.
+   Typography: Poppins (headings) + Roboto (body).
+   ============================================================ */
+
+:root {
+  /* brand */
+  --color-primary: #143d28;
+  --color-primary-dark: #0a2417;
+  --color-primary-soft: #1c5236;
+  --color-accent: #16a34a;
+  --color-accent-dark: #15803d;
+  --color-accent-soft: #4ade80;
+
+  /* neutrals */
+  --color-bg: #ffffff;
+  --color-bg-alt: #f8f7f4;
+  --color-bg-soft: #f1efe9;
+  --color-border: #e6e3dc;
+  --color-border-strong: #c9c4b8;
+  --color-text: #14181a;
+  --color-text-soft: #3f464c;
+  --color-text-muted: #6b7280;
+  --color-text-inverse: #ffffff;
+
+  /* fonts */
+  --font-heading: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* spacing */
+  --container: 1240px;
+
+  /* shadows */
+  --shadow-sm: 0 1px 2px rgba(20, 61, 40, 0.05), 0 2px 6px rgba(20, 61, 40, 0.04);
+  --shadow-md: 0 1px 2px rgba(20, 61, 40, 0.06), 0 12px 28px rgba(20, 61, 40, 0.08);
+  --shadow-lg: 0 1px 2px rgba(20, 61, 40, 0.06), 0 24px 56px rgba(20, 61, 40, 0.14);
+
+  /* radius */
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 10px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--color-text);
+}
+
+p {
+  color: var(--color-text-soft);
+}
+
+/* ---------- layout primitives ---------- */
+.container {
+  width: min(var(--container), 92%);
+  margin-inline: auto;
+}
+
+.section {
+  padding: 6rem 0;
+}
+
+.section-tight {
+  padding: 4rem 0;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: clamp(1.95rem, 4vw, 3rem);
+  margin-bottom: 1.2rem;
+  max-width: 720px;
+}
+
+.section-lead {
+  font-size: 1.1rem;
+  color: var(--color-text-soft);
+  max-width: 640px;
+  line-height: 1.65;
+}
+
+.section-header {
+  margin-bottom: 3.5rem;
+  max-width: 760px;
+}
+
+.section-header.centered {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section-header.centered .section-title,
+.section-header.centered .section-lead {
+  margin-inline: auto;
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.6rem;
+  border-radius: var(--radius);
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-accent {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.btn-accent:hover {
+  background: var(--color-accent-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-text-inverse);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.btn-outline:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-ghost:hover {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+/* ---------- helpers ---------- */
+.text-accent {
+  color: var(--color-accent);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.bg-soft {
+  background: var(--color-bg-alt);
+}
+
+.bg-primary {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.bg-primary p,
+.bg-primary h1,
+.bg-primary h2,
+.bg-primary h3 {
+  color: var(--color-text-inverse);
+}
+
+/* ---------- animations ---------- */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.7s ease both;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  .section {
+    padding: 4rem 0;
+  }
+}

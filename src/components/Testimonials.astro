@@ -1,0 +1,220 @@
+---
+import { testimonials } from '../data/testimonials';
+---
+
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <header class="section-header centered">
+      <span class="eyebrow">What clients say</span>
+      <h2 class="section-title">Trusted by homeowners across the DMV.</h2>
+    </header>
+
+    <div class="carousel" data-carousel>
+      <button class="nav prev" data-prev aria-label="Previous testimonial">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </button>
+
+      <ul class="track" data-track>
+        {
+          testimonials.map((t) => (
+            <li class="slide">
+              <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+              <blockquote>{t.quote}</blockquote>
+              <div class="meta">
+                <strong>{t.author}</strong>
+                <span>
+                  {t.location} · {t.service}
+                </span>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <button class="nav next" data-next aria-label="Next testimonial">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
+
+      <div class="dots" data-dots>
+        {testimonials.map((_, i) => <button class="dot" data-dot={i} aria-label={`Show testimonial ${i + 1}`} />)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials {
+    background: var(--color-bg);
+    padding: 6rem 0;
+  }
+
+  .carousel {
+    position: relative;
+    max-width: 920px;
+    margin-inline: auto;
+  }
+
+  .track {
+    list-style: none;
+    display: flex;
+    overflow: hidden;
+    margin-inline: 3rem;
+  }
+
+  .slide {
+    flex: 0 0 100%;
+    text-align: center;
+    padding: 1rem 1.5rem 3rem;
+    transition: opacity 0.45s ease;
+  }
+
+  .quote-mark {
+    font-family: var(--font-heading);
+    font-size: 5rem;
+    line-height: 0.4;
+    color: var(--color-accent);
+    opacity: 0.45;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+
+  blockquote {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+    line-height: 1.4;
+    color: var(--color-text);
+    margin-bottom: 1.8rem;
+  }
+
+  .meta strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    color: var(--color-text);
+    margin-bottom: 0.2rem;
+  }
+
+  .meta span {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .nav {
+    position: absolute;
+    top: 38%;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-primary);
+    display: grid;
+    place-items: center;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  .nav:hover {
+    background: var(--color-primary);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .nav svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .prev {
+    left: 0;
+  }
+  .next {
+    right: 0;
+  }
+
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-border-strong);
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .dot.is-active {
+    background: var(--color-accent);
+    transform: scale(1.2);
+  }
+
+  @media (max-width: 640px) {
+    .nav {
+      top: auto;
+      bottom: -10px;
+    }
+    .prev {
+      left: 35%;
+    }
+    .next {
+      right: 35%;
+    }
+    .track {
+      margin-inline: 0;
+    }
+  }
+</style>
+
+<script>
+  const carousels = document.querySelectorAll<HTMLElement>('[data-carousel]');
+  carousels.forEach((carousel) => {
+    const track = carousel.querySelector<HTMLElement>('[data-track]');
+    const slides = carousel.querySelectorAll<HTMLElement>('.slide');
+    const dots = carousel.querySelectorAll<HTMLElement>('[data-dot]');
+    const prev = carousel.querySelector<HTMLElement>('[data-prev]');
+    const next = carousel.querySelector<HTMLElement>('[data-next]');
+    if (!track || slides.length === 0) return;
+
+    let index = 0;
+    const go = (i: number) => {
+      index = (i + slides.length) % slides.length;
+      track.scrollTo({ left: index * track.clientWidth, behavior: 'smooth' });
+      dots.forEach((d, di) => d.classList.toggle('is-active', di === index));
+    };
+
+    // initial sizing — set the track width by stacking via scroll
+    track.style.scrollSnapType = 'x mandatory';
+    slides.forEach((s) => {
+      s.style.scrollSnapAlign = 'start';
+    });
+
+    prev?.addEventListener('click', () => go(index - 1));
+    next?.addEventListener('click', () => go(index + 1));
+    dots.forEach((d) =>
+      d.addEventListener('click', () => {
+        const i = Number(d.getAttribute('data-dot'));
+        go(i);
+      })
+    );
+
+    // auto-advance every 8s
+    let timer = window.setInterval(() => go(index + 1), 8000);
+    carousel.addEventListener('mouseenter', () => clearInterval(timer));
+    carousel.addEventListener('mouseleave', () => {
+      timer = window.setInterval(() => go(index + 1), 8000);
+    });
+
+    // re-align on resize
+    window.addEventListener('resize', () => go(index));
+    go(0);
+  });
+</script>

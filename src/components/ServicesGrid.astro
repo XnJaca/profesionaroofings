@@ -1,0 +1,153 @@
+---
+import { Image } from 'astro:assets';
+import { services } from '../data/services';
+---
+
+<section class="services" id="services">
+  <div class="container">
+    <header class="section-header">
+      <span class="eyebrow">What we do</span>
+      <h2 class="section-title">Complete exterior &amp; interior solutions</h2>
+      <p class="section-lead">
+        From a single shingle replacement to a full home addition, we handle every project with
+        the same care and craftsmanship — one trusted team for every trade.
+      </p>
+    </header>
+
+    <ul class="grid">
+      {
+        services.map((service) => (
+          <li class="card">
+            <a href={`/services/${service.slug}/`} class="card-link">
+              <span class="card-image">
+                <Image
+                  src={service.cover}
+                  alt={service.coverAlt}
+                  widths={[400, 600, 800]}
+                  sizes="(min-width: 1100px) 400px, (min-width: 700px) 50vw, 100vw"
+                />
+              </span>
+              <div class="card-body">
+                <h3>{service.name}</h3>
+                <p>{service.summary}</p>
+                <span class="card-link-label">
+                  Learn more
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </span>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services {
+    padding: 6rem 0;
+    background: var(--color-bg);
+  }
+
+  .grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition:
+      transform 0.28s ease,
+      box-shadow 0.28s ease,
+      border-color 0.28s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-border-strong);
+  }
+
+  .card-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: inherit;
+  }
+
+  .card-image {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--color-bg-soft);
+  }
+
+  .card-image :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.55s ease;
+  }
+
+  .card:hover .card-image :global(img) {
+    transform: scale(1.05);
+  }
+
+  .card-body {
+    padding: 1.8rem 1.7rem 2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .card p {
+    font-size: 0.95rem;
+    color: var(--color-text-soft);
+    line-height: 1.55;
+    margin: 0 0 1.5rem;
+    flex: 1;
+  }
+
+  .card-link-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    transition: color 0.2s ease, gap 0.25s ease;
+  }
+
+  .card:hover .card-link-label {
+    color: var(--color-accent);
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,188 @@
+---
+import { Image } from 'astro:assets';
+import hero02 from '../assets/hero/hero-02.jpg';
+import { site } from '../data/site';
+---
+
+<section class="about" id="about">
+  <div class="container">
+    <div class="grid">
+      <div class="copy">
+        <span class="eyebrow">Our story</span>
+        <h2 class="section-title">
+          A family business built on <span class="text-accent">craftsmanship</span>.
+        </h2>
+        <p>
+          For over a decade, William Ferman and his team have been protecting homes across the
+          DMV with honest work, fair pricing, and a commitment to doing the job right the first
+          time.
+        </p>
+        <p>
+          We&rsquo;re not the biggest contractor in town — we&rsquo;re the one your neighbors
+          actually recommend. Every project, big or small, gets the same care and crew.
+        </p>
+
+        <ul class="reasons">
+          <li>
+            <span class="num">01</span>
+            <div>
+              <h4>Licensed, bonded, and insured</h4>
+              <p>{site.license} — fully credentialed and protected for every job.</p>
+            </div>
+          </li>
+          <li>
+            <span class="num">02</span>
+            <div>
+              <h4>One contractor, every trade</h4>
+              <p>Roofing, siding, gutters, and interior — managed by one team and one schedule.</p>
+            </div>
+          </li>
+          <li>
+            <span class="num">03</span>
+            <div>
+              <h4>10-year workmanship warranty</h4>
+              <p>We stand behind every nail. If there&rsquo;s an issue, we make it right.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="image-wrap">
+        <Image
+          src={hero02}
+          alt="Premium brick home featuring quality roofing and exterior work"
+          widths={[600, 900, 1200]}
+          sizes="(min-width: 900px) 540px, 100vw"
+          class="image"
+        />
+        <span class="badge">EST. 2012</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    background: var(--color-primary);
+    color: #fff;
+    padding: 6rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(22, 163, 74, 0.22), transparent 70%);
+    pointer-events: none;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 4.5rem;
+    align-items: center;
+    position: relative;
+  }
+
+  .copy .eyebrow {
+    color: var(--color-accent-soft);
+  }
+
+  .copy .section-title {
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+
+  .copy p {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 1.1rem;
+  }
+
+  .reasons {
+    list-style: none;
+    margin-top: 2.5rem;
+  }
+
+  .reasons li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.2rem;
+    padding: 1.4rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .reasons li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .num {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-accent-soft);
+    line-height: 1;
+  }
+
+  .reasons h4 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 0.3rem;
+  }
+
+  .reasons p {
+    font-size: 0.93rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+  }
+
+  .image-wrap {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+    border: 4px solid rgba(255, 255, 255, 0.92);
+  }
+
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .badge {
+    position: absolute;
+    bottom: -22px;
+    left: -22px;
+    background: var(--color-accent);
+    color: #fff;
+    padding: 1rem 1.4rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    font-size: 1rem;
+    border-radius: var(--radius);
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .image-wrap {
+      max-width: 500px;
+      margin-inline: auto;
+    }
+  }
+</style>

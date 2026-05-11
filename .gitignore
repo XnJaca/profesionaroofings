@@ -1,0 +1,25 @@
+# build
+dist/
+.output/
+.astro/
+
+# deps
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# env
+.env
+.env.production
+.env.local
+
+# macOS
+.DS_Store
+
+# original raw assets (kept locally as reference only)
+servicios/
+proroofings_estilo_1.html

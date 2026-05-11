@@ -1,0 +1,155 @@
+---
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+import hero01 from '../assets/hero/hero-01.jpg';
+---
+
+<section class="hero">
+  <Image
+    src={hero01}
+    alt="Roof at sunset over a residential home"
+    class="hero-bg"
+    loading="eager"
+    fetchpriority="high"
+    widths={[768, 1280, 1600, 1920]}
+    sizes="100vw"
+  />
+  <div class="hero-overlay"></div>
+
+  <div class="container hero-inner">
+    <span class="hero-eyebrow">Roofing · Siding · Gutters · Remodeling</span>
+    <h1 class="hero-title">Transform your home.<br />Built to last.</h1>
+    <p class="hero-lead">
+      Family-owned roofing and exterior specialists protecting homes across Maryland,
+      Virginia, and the DC metro area for over a decade.
+    </p>
+
+    <div class="hero-cta">
+      <a href="/#contact" class="btn btn-accent">Get a Free Estimate →</a>
+      <a href={`tel:${site.phoneRaw}`} class="btn btn-outline">Call {site.phone}</a>
+    </div>
+
+    <ul class="hero-stats">
+      <li>
+        <strong>12+</strong>
+        <span>Years in business</span>
+      </li>
+      <li>
+        <strong>500+</strong>
+        <span>Projects completed</span>
+      </li>
+      <li>
+        <strong>100%</strong>
+        <span>Licensed &amp; insured</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    color: #fff;
+    padding: 7rem 0 6rem;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(10, 36, 23, 0.88) 0%,
+      rgba(20, 61, 40, 0.7) 55%,
+      rgba(20, 61, 40, 0.55) 100%
+    );
+    z-index: -1;
+  }
+
+  .hero-inner {
+    max-width: 880px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--color-accent-soft);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.6rem, 6vw, 4.6rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: #fff;
+    margin-bottom: 1.6rem;
+  }
+
+  .hero-lead {
+    font-size: 1.18rem;
+    max-width: 600px;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+    margin-bottom: 3.5rem;
+  }
+
+  .hero-stats {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    gap: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .hero-stats strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-accent-soft);
+    line-height: 1;
+  }
+
+  .hero-stats span {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.78);
+    margin-top: 0.4rem;
+    display: inline-block;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      padding: 4.5rem 0 4.5rem;
+    }
+    .hero-stats {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem 2rem;
+    }
+  }
+</style>

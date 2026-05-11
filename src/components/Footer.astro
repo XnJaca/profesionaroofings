@@ -1,0 +1,206 @@
+---
+import { site } from '../data/site';
+import { services } from '../data/services';
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="grid">
+      <div class="brand">
+        <div class="brand-name">{site.name}</div>
+        <p>
+          Family-owned roofing, siding, gutters, and remodeling specialists serving the DMV area
+          since {site.founded}.
+        </p>
+        <ul class="socials">
+          <li>
+            <a href={site.social.facebook} aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M22 12c0-5.5-4.5-10-10-10S2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7c4.7-.8 8.4-4.9 8.4-9.9z" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href={site.social.instagram} aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href={site.whatsapp} aria-label="WhatsApp">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5 0-.1-.7-1.7-.9-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.2 3 .1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.6.2-1.2.2-1.4-.1-.2-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.3-1.4C8.7 21.5 10.3 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2z" />
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Services</h5>
+        <ul class="link-list">
+          {
+            services.slice(0, 6).map((s) => (
+              <li>
+                <a href={`/services/${s.slug}/`}>{s.shortName}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h5>More</h5>
+        <ul class="link-list">
+          {
+            services.slice(6).map((s) => (
+              <li>
+                <a href={`/services/${s.slug}/`}>{s.shortName}</a>
+              </li>
+            ))
+          }
+          <li><a href="/#projects">All Projects</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Get in touch</h5>
+        <ul class="link-list">
+          <li>
+            <a href={`tel:${site.phoneRaw}`}>{site.phone}</a>
+          </li>
+          <li>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </li>
+          <li>{site.city}</li>
+          <li>{site.hours}</li>
+          <li class="muted">{site.license}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <span>© {new Date().getFullYear()} {site.name}. All rights reserved.</span>
+      <span>Licensed · Bonded · Insured · {site.license}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-primary-dark);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 5rem 0 2rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .brand-name {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.9rem;
+  }
+
+  .brand p {
+    font-size: 0.94rem;
+    color: rgba(255, 255, 255, 0.68);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    max-width: 320px;
+  }
+
+  h5 {
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #fff;
+    margin-bottom: 1.1rem;
+  }
+
+  .link-list {
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .link-list li,
+  .link-list a {
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.2s;
+  }
+
+  .link-list a:hover {
+    color: var(--color-accent-soft);
+  }
+
+  .link-list .muted {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+
+  .socials {
+    list-style: none;
+    display: flex;
+    gap: 0.7rem;
+  }
+
+  .socials a {
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm);
+    display: grid;
+    place-items: center;
+    color: rgba(255, 255, 255, 0.72);
+    transition: all 0.2s;
+  }
+
+  .socials a:hover {
+    background: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+  }
+
+  .socials svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.13);
+    padding-top: 1.8rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,257 @@
+---
+import { site } from '../data/site';
+---
+
+<section class="cta" id="contact">
+  <div class="container">
+    <div class="grid">
+      <div class="copy">
+        <span class="eyebrow">Free estimate</span>
+        <h2>
+          Ready to protect <span class="text-accent">your home?</span>
+        </h2>
+        <p>
+          Get a no-pressure quote within 24 hours. Available across Maryland, Virginia, and
+          Washington DC. Insurance claims welcome.
+        </p>
+
+        <ul class="contact-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13 1.05.37 2.07.72 3.04a2 2 0 01-.45 2.11L8.09 10.2a16 16 0 006 6l1.34-1.29a2 2 0 012.11-.45c.97.35 2 .59 3.04.72A2 2 0 0122 16.92z" />
+            </svg>
+            <a href={`tel:${site.phoneRaw}`}>{site.phone}</a>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>{site.city} — Serving {site.serviceArea}</span>
+          </li>
+        </ul>
+      </div>
+
+      <form class="form" name="estimate" method="POST" action="https://formspree.io/f/your_id" data-form>
+        <h3>Request a free estimate</h3>
+        <div class="row">
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" required autocomplete="name" />
+          </label>
+          <label>
+            <span>Phone</span>
+            <input type="tel" name="phone" required autocomplete="tel" />
+          </label>
+        </div>
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" required autocomplete="email" />
+        </label>
+        <label>
+          <span>Service interested in</span>
+          <select name="service" required>
+            <option value="">Select a service…</option>
+            <option>Asphalt Shingles Roofing</option>
+            <option>TPO Roofing (Commercial/Residential)</option>
+            <option>James Hardie Siding</option>
+            <option>Drywall Work</option>
+            <option>Gutters &amp; Gutter Guards</option>
+            <option>Kitchen Remodeling</option>
+            <option>Bathroom Remodeling</option>
+            <option>Interior Remodeling</option>
+            <option>Decks &amp; Porches</option>
+            <option>Home Addition / New Construction</option>
+            <option>Other / Not sure</option>
+          </select>
+        </label>
+        <label>
+          <span>Project details</span>
+          <textarea name="message" rows="4" placeholder="Tell us a bit about your project, timeline, and address…"></textarea>
+        </label>
+
+        <button type="submit" class="btn btn-accent submit">
+          Send Request →
+        </button>
+        <p class="disclaimer">
+          By submitting, you agree to be contacted at the info above. No spam, ever.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    background: var(--color-primary-dark);
+    color: #fff;
+    padding: 6rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 45%;
+    background: linear-gradient(135deg, transparent, rgba(22, 163, 74, 0.13));
+    pointer-events: none;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 4rem;
+    align-items: start;
+    position: relative;
+  }
+
+  .copy .eyebrow {
+    color: var(--color-accent-soft);
+  }
+
+  .copy h2 {
+    font-size: clamp(2rem, 3.6vw, 2.8rem);
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  .copy p {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin-bottom: 2.2rem;
+    max-width: 480px;
+  }
+
+  .contact-list {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .contact-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .contact-list svg {
+    width: 18px;
+    height: 18px;
+    color: var(--color-accent-soft);
+    flex-shrink: 0;
+  }
+
+  .contact-list a:hover {
+    color: var(--color-accent-soft);
+  }
+
+  .form {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px);
+    padding: 2.4rem 2.2rem;
+    border-radius: var(--radius-lg);
+    border-left: 3px solid var(--color-accent);
+  }
+
+  .form h3 {
+    color: #fff;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.9rem;
+  }
+
+  label span {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.72);
+    margin-bottom: 0.4rem;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--radius-sm);
+    font: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  select option {
+    background: var(--color-primary-dark);
+    color: #fff;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .submit {
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 1rem 1.6rem;
+  }
+
+  .disclaimer {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin-top: 0.9rem;
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
