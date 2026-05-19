@@ -1,26 +1,26 @@
 /* ============================================================
    Professional Roofing — global styles
-   Palette: deep navy + warm amber, clean and corporate.
+   Palette: navy blue from logo (Professional Construction logo).
    Typography: Poppins (headings) + Roboto (body).
    ============================================================ */
 
 :root {
-  /* brand */
-  --color-primary: #143d28;
-  --color-primary-dark: #0a2417;
-  --color-primary-soft: #1c5236;
-  --color-accent: #16a34a;
-  --color-accent-dark: #15803d;
-  --color-accent-soft: #4ade80;
+  /* brand — navy blue from logo */
+  --color-primary: #1e3a6e;
+  --color-primary-dark: #122549;
+  --color-primary-soft: #2a4d8f;
+  --color-accent: #2563eb;
+  --color-accent-dark: #1d4ed8;
+  --color-accent-soft: #60a5fa;
 
   /* neutrals */
   --color-bg: #ffffff;
-  --color-bg-alt: #f8f7f4;
-  --color-bg-soft: #f1efe9;
-  --color-border: #e6e3dc;
-  --color-border-strong: #c9c4b8;
-  --color-text: #14181a;
-  --color-text-soft: #3f464c;
+  --color-bg-alt: #f5f7fb;
+  --color-bg-soft: #eef2f9;
+  --color-border: #e1e6ef;
+  --color-border-strong: #c4cbdb;
+  --color-text: #111827;
+  --color-text-soft: #374151;
   --color-text-muted: #6b7280;
   --color-text-inverse: #ffffff;
 
@@ -32,9 +32,9 @@
   --container: 1240px;
 
   /* shadows */
-  --shadow-sm: 0 1px 2px rgba(20, 61, 40, 0.05), 0 2px 6px rgba(20, 61, 40, 0.04);
-  --shadow-md: 0 1px 2px rgba(20, 61, 40, 0.06), 0 12px 28px rgba(20, 61, 40, 0.08);
-  --shadow-lg: 0 1px 2px rgba(20, 61, 40, 0.06), 0 24px 56px rgba(20, 61, 40, 0.14);
+  --shadow-sm: 0 1px 2px rgba(18, 37, 73, 0.05), 0 2px 6px rgba(18, 37, 73, 0.04);
+  --shadow-md: 0 1px 2px rgba(18, 37, 73, 0.06), 0 12px 28px rgba(18, 37, 73, 0.10);
+  --shadow-lg: 0 1px 2px rgba(18, 37, 73, 0.06), 0 24px 56px rgba(18, 37, 73, 0.16);
 
   /* radius */
   --radius-sm: 4px;

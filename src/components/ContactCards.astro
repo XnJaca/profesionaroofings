@@ -1,0 +1,255 @@
+---
+import QRCode from 'qrcode';
+import { contacts } from '../data/site';
+
+const cards = await Promise.all(
+  contacts.map(async (c) => {
+    const waUrl = c.whatsappMessage
+      ? `${c.whatsapp}?text=${encodeURIComponent(c.whatsappMessage)}`
+      : c.whatsapp;
+    const qr = await QRCode.toString(waUrl, {
+      type: 'svg',
+      errorCorrectionLevel: 'M',
+      margin: 1,
+      color: { dark: '#1e3a6e', light: '#ffffff' },
+    });
+    return { contact: c, waUrl, qr };
+  })
+);
+---
+
+<section class="cards-section" id="contact-cards">
+  <div class="container">
+    <header class="section-header centered">
+      <span class="eyebrow">Scan &amp; chat</span>
+      <h2 class="section-title">Talk to our team on <span class="text-accent">WhatsApp</span>.</h2>
+      <p class="section-lead">
+        Scan the QR code or tap a card to message us directly. We typically reply within a
+        few minutes during business hours.
+      </p>
+    </header>
+
+    <ul class="grid">
+      {
+        cards.map(({ contact, waUrl, qr }) => (
+          <li class="card">
+            <header class="card-head">
+              <div class="meta">
+                <span class="role">{contact.role}</span>
+                <h3>{contact.name}</h3>
+                <a class="phone-link" href={`tel:${contact.phoneRaw}`}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13 1.05.37 2.07.72 3.04a2 2 0 01-.45 2.11L8.09 10.2a16 16 0 006 6l1.34-1.29a2 2 0 012.11-.45c.97.35 2 .59 3.04.72A2 2 0 0122 16.92z" />
+                  </svg>
+                  <span>{contact.phone}</span>
+                </a>
+              </div>
+              <span class="brand-tag" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5 0-.1-.7-1.7-.9-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.2 3 .1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.6.2-1.2.2-1.4-.1-.2-.3-.2-.5-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.3-1.4C8.7 21.5 10.3 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2z" />
+                </svg>
+                WhatsApp
+              </span>
+            </header>
+
+            <a
+              class="qr-link"
+              href={waUrl}
+              target="_blank"
+              rel="noopener"
+              aria-label={`Open WhatsApp chat with ${contact.name}`}
+            >
+              <div class="qr" set:html={qr} />
+              <span class="qr-caption">Scan to open chat</span>
+            </a>
+
+            <div class="actions">
+              <a class="btn btn-accent" href={waUrl} target="_blank" rel="noopener">
+                Message on WhatsApp
+              </a>
+              <a class="btn btn-ghost" href={`tel:${contact.phoneRaw}`}>Call</a>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .cards-section {
+    background: var(--color-bg-alt);
+    padding: 5rem 0;
+  }
+
+  .grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.8rem 1.8rem 1.6rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-border-strong);
+  }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 0.3rem;
+  }
+
+  .role {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-accent);
+    margin-bottom: 0.4rem;
+  }
+
+  .meta h3 {
+    font-size: 1.35rem;
+    color: var(--color-primary);
+    margin-bottom: 0.55rem;
+  }
+
+  .phone-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--color-text-soft);
+    transition: color 0.2s ease;
+  }
+
+  .phone-link:hover {
+    color: var(--color-accent);
+  }
+
+  .phone-link svg {
+    width: 15px;
+    height: 15px;
+    color: var(--color-accent);
+  }
+
+  .brand-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #25d366;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 0.32rem 0.6rem;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+
+  .brand-tag svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .qr-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.1rem;
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius);
+    background: #fff;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .qr-link:hover {
+    border-color: var(--color-accent);
+    background: rgba(37, 99, 235, 0.03);
+  }
+
+  .qr {
+    width: 180px;
+    height: 180px;
+    display: grid;
+    place-items: center;
+  }
+
+  .qr :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .qr-caption {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-text-muted);
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .actions .btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 720px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .qr {
+      width: 200px;
+      height: 200px;
+    }
+
+    .actions {
+      flex-direction: column;
+    }
+  }
+</style>
