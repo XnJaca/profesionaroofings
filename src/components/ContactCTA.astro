@@ -46,7 +46,7 @@ import { site, contacts } from '../data/site';
         </ul>
       </div>
 
-      <form class="form" name="estimate" method="POST" action="https://formspree.io/f/your_id" data-form>
+      <form class="form" name="estimate" method="POST" action="/api/contact" data-form>
         <h3>Request a free estimate</h3>
         <div class="row">
           <label>
@@ -84,9 +84,15 @@ import { site, contacts } from '../data/site';
           <textarea name="message" rows="4" placeholder="Tell us a bit about your project, timeline, and address…"></textarea>
         </label>
 
+        <label class="hp" aria-hidden="true">
+          <span>Website</span>
+          <input type="text" name="website" tabindex="-1" autocomplete="off" />
+        </label>
+
         <button type="submit" class="btn btn-accent submit">
           Send Request →
         </button>
+        <p class="form-status" data-status role="status" aria-live="polite"></p>
         <p class="disclaimer">
           By submitting, you agree to be contacted at the info above. No spam, ever.
         </p>
@@ -259,6 +265,39 @@ import { site, contacts } from '../data/site';
     text-align: center;
   }
 
+  .hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form-status {
+    margin-top: 0.9rem;
+    font-size: 0.9rem;
+    text-align: center;
+    min-height: 1.2em;
+  }
+
+  .form-status.is-success {
+    color: var(--color-accent-soft);
+  }
+
+  .form-status.is-error {
+    color: #fca5a5;
+  }
+
+  .form.is-sent .submit,
+  .form.is-sent label:not(.hp) {
+    display: none;
+  }
+
+  .form.is-sent .form-status {
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
   @media (max-width: 900px) {
     .grid {
       grid-template-columns: 1fr;
@@ -269,3 +308,45 @@ import { site, contacts } from '../data/site';
     }
   }
 </style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('form[data-form]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-status]');
+    const submit = form.querySelector<HTMLButtonElement>('button[type=submit]');
+    const originalText = submit?.textContent ?? 'Send Request';
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!status || !submit) return;
+
+      status.className = 'form-status';
+      status.textContent = '';
+      submit.disabled = true;
+      submit.textContent = 'Sending…';
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          body: new FormData(form),
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.ok) {
+          form.classList.add('is-sent');
+          status.classList.add('is-success');
+          status.textContent =
+            "Thanks! We received your request and will reach out within 24 hours.";
+        } else {
+          throw new Error(data.error || 'Send failed');
+        }
+      } catch (err) {
+        submit.disabled = false;
+        submit.textContent = originalText;
+        status.classList.add('is-error');
+        status.textContent =
+          'Something went wrong. Please call or WhatsApp us — we are happy to help.';
+      }
+    });
+  }
+</script>

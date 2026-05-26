@@ -1,7 +1,10 @@
 import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
 
 export default defineConfig({
-  site: 'https://professional-roofing.onrender.com',
+  site: 'https://pcdmv.com',
+  output: 'static',
+  adapter: node({ mode: 'standalone' }),
   build: {
     inlineStylesheets: 'auto',
   },
