@@ -4,9 +4,19 @@ import { site } from '../data/site';
 
 <div class="topbar">
   <div class="container topbar-inner">
-    <span class="topbar-badge">{site.license} · Licensed &amp; Insured</span>
-    <span class="topbar-sep">·</span>
-    <span class="topbar-area">Serving {site.serviceArea}</span>
+    <ul class="topbar-licenses" aria-label="Licenses">
+      {
+        site.licenses.map((l) => (
+          <li class="lic">
+            <span class="lic-label">{l.label}</span>
+            <span class="lic-num">
+              {l.jurisdiction ? `${l.jurisdiction} – ` : ''}
+              {l.number}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
     <div class="topbar-contact">
       <a href={`tel:${site.phoneRaw}`}>📞 {site.phone}</a>
     </div>
@@ -17,7 +27,7 @@ import { site } from '../data/site';
   <div class="container nav-inner">
     <a href="/" class="logo" aria-label={`${site.name} home`}>
       <img
-        src="/logo.jpg"
+        src="/logo.png"
         alt={`${site.name} logo`}
         class="logo-img"
         width="220"
@@ -47,7 +57,7 @@ import { site } from '../data/site';
 <style>
   .topbar {
     background: var(--color-primary-dark);
-    color: rgba(255, 255, 255, 0.88);
+    color: rgba(255, 255, 255, 0.92);
     font-size: 0.82rem;
     padding: 0.55rem 0;
     letter-spacing: 0.02em;
@@ -56,36 +66,60 @@ import { site } from '../data/site';
   .topbar-inner {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 1rem;
     flex-wrap: wrap;
   }
 
-  .topbar-badge {
+  .topbar-licenses {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0 1.1rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .topbar-licenses .lic {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
+    position: relative;
+    padding-left: 0.95rem;
   }
 
-  .topbar-badge::before {
+  .topbar-licenses .lic::before {
     content: '';
-    width: 6px;
-    height: 6px;
+    position: absolute;
+    left: 0;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--color-accent-soft);
+    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
   }
 
-  .topbar-sep {
-    opacity: 0.4;
+  .lic-label {
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    font-weight: 500;
   }
 
-  .topbar-area {
-    color: rgba(255, 255, 255, 0.7);
+  .lic-num {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.03em;
   }
 
   .topbar-contact {
     margin-left: auto;
     display: flex;
     gap: 1.2rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
   }
 
   .topbar-contact a {
@@ -117,18 +151,27 @@ import { site } from '../data/site';
     display: flex;
     align-items: center;
     color: var(--color-primary);
+    height: 72px;
+    width: 220px;
+    overflow: hidden;
   }
 
   .logo-img {
-    height: 64px;
-    width: auto;
+    height: 72px;
+    width: 100%;
     object-fit: contain;
     display: block;
+    transform: scale(2.1);
+    transform-origin: center center;
   }
 
   @media (max-width: 540px) {
+    .logo {
+      height: 58px;
+      width: 180px;
+    }
     .logo-img {
-      height: 52px;
+      height: 58px;
     }
   }
 
@@ -186,13 +229,21 @@ import { site } from '../data/site';
   }
 
   @media (max-width: 900px) {
-    .topbar-sep,
-    .topbar-area {
-      display: none;
+    .topbar-inner {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .topbar-licenses {
+      justify-content: center;
+      gap: 0.15rem 0.9rem;
+      width: 100%;
     }
 
     .topbar-contact {
-      margin-left: auto;
+      margin-left: 0;
+      width: 100%;
+      justify-content: center;
     }
 
     .nav-toggle {

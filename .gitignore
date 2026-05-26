@@ -23,3 +23,6 @@ pnpm-debug.log*
 # original raw assets (kept locally as reference only)
 servicios/
 proroofings_estilo_1.html
+/logo.png
+/logo.jpeg
+/logo_complete.jpeg

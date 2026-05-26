@@ -15,7 +15,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     quote:
-      'We hired Professional Roofing for a full James Hardie siding job. The team was on time every single day, communicated clearly, and the finished house looks better than we imagined.',
+      'We hired Professional Construction for a full James Hardie siding job. The team was on time every single day, communicated clearly, and the finished house looks better than we imagined.',
     author: 'Michael R.',
     location: 'Alexandria, VA',
     service: 'James Hardie Siding',

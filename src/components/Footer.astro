@@ -77,14 +77,29 @@ import { services } from '../data/services';
           </li>
           <li>{site.city}</li>
           <li>{site.hours}</li>
-          <li class="muted">{site.license}</li>
         </ul>
       </div>
     </div>
 
+    <div class="licenses-block" aria-label="Licenses">
+      <span class="licenses-title">Licensed · Bonded · Insured</span>
+      <ul class="licenses-list">
+        {
+          site.licenses.map((l) => (
+            <li>
+              <span class="lic-label">
+                {l.jurisdiction ? `${l.jurisdiction} ${l.label}` : l.label}
+              </span>
+              <span class="lic-num">{l.number}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
     <div class="bottom">
       <span>© {new Date().getFullYear()} {site.name}. All rights reserved.</span>
-      <span>Licensed · Bonded · Insured · {site.license}</span>
+      <span>{site.serviceArea}</span>
     </div>
   </div>
 </footer>
@@ -178,6 +193,60 @@ import { services } from '../data/services';
   .socials svg {
     width: 17px;
     height: 17px;
+  }
+
+  .licenses-block {
+    border-top: 1px solid rgba(255, 255, 255, 0.13);
+    padding: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .licenses-title {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-accent-soft);
+  }
+
+  .licenses-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .licenses-list li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.85rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius);
+  }
+
+  .licenses-list .lic-label {
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .licenses-list .lic-num {
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.02em;
   }
 
   .bottom {
