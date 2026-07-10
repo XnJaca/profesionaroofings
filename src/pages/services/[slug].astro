@@ -16,12 +16,44 @@ export function getStaticPaths() {
 const { service } = Astro.props;
 
 const otherServices = services.filter((s) => s.slug !== service.slug).slice(0, 4);
+
+const pageUrl = new URL(`/services/${service.slug}/`, Astro.site).toString();
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': `${pageUrl}#service`,
+  name: service.name,
+  description: service.summary,
+  serviceType: service.shortName,
+  url: pageUrl,
+  provider: { '@id': new URL('/#business', Astro.site).toString() },
+  areaServed: [
+    { '@type': 'State', name: 'Maryland' },
+    { '@type': 'State', name: 'Virginia' },
+    { '@type': 'AdministrativeArea', name: 'Washington DC' },
+  ],
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.toString() },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: new URL('/#services', Astro.site).toString() },
+    { '@type': 'ListItem', position: 3, name: service.shortName, item: pageUrl },
+  ],
+};
 ---
 
 <Layout
-  title={`${service.name} — Professional Construction LLC`}
+  title={`${service.shortName} in Maryland, VA & DC | Professional Construction`}
   description={service.summary}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  </Fragment>
   <!-- Service hero -->
   <section class="service-hero">
     <Image

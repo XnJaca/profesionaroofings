@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FloatingCTA from '../components/FloatingCTA.astro';
+import { site, licenses } from '../data/site';
 
 interface Props {
   title: string;
@@ -12,11 +13,53 @@ interface Props {
 
 const {
   title,
-  description = 'Family-owned roofing, siding, and exterior specialists serving Maryland, Virginia, and DC since 2012. Licensed, insured, and ready for your free estimate.',
+  description = 'Family-owned roofing, siding, and exterior specialists based in Lanham, MD, serving Maryland, Virginia, and Washington DC since 2012. Licensed, insured, and ready for your free estimate.',
   ogImage = '/og.jpg',
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageAbsolute = new URL(ogImage, Astro.site).toString();
+
+const businessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'RoofingContractor',
+  '@id': new URL('/#business', Astro.site).toString(),
+  name: site.name,
+  alternateName: site.serviceLine,
+  url: Astro.site?.toString(),
+  logo: new URL('/logo.png', Astro.site).toString(),
+  image: new URL('/og.jpg', Astro.site).toString(),
+  telephone: site.phoneRaw,
+  email: site.email,
+  foundingDate: String(site.founded),
+  slogan: site.tagline,
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Lanham',
+    addressRegion: 'MD',
+    addressCountry: 'US',
+  },
+  areaServed: [
+    { '@type': 'State', name: 'Maryland' },
+    { '@type': 'State', name: 'Virginia' },
+    { '@type': 'AdministrativeArea', name: 'Washington DC' },
+  ],
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      opens: '08:00',
+      closes: '18:00',
+    },
+  ],
+  identifier: licenses.map((l) => ({
+    '@type': 'PropertyValue',
+    name: `${l.jurisdiction ? l.jurisdiction + ' ' : ''}${l.label}`.trim(),
+    value: l.number,
+  })),
+  sameAs: ['https://www.yelp.com/biz/professional-roofing-lanham-4'],
+};
 ---
 
 <!doctype html>
@@ -30,14 +73,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <link rel="canonical" href={canonical} />
 
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageAbsolute} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageAbsolute} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(businessSchema)} />
+    <slot name="head" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/logo.png" />

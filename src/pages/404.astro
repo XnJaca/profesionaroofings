@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { site } from '../data/site';
+---
+
+<Layout
+  title="Page Not Found | Professional Construction LLC"
+  description="The page you are looking for does not exist. Explore our roofing, siding, and remodeling services in Maryland, Virginia, and Washington DC."
+>
+  <section class="not-found">
+    <div class="container">
+      <span class="code">404</span>
+      <h1>Page not found</h1>
+      <p>
+        The page you're looking for doesn't exist or has moved. Head back home or give us a
+        call — we're happy to help.
+      </p>
+      <div class="actions">
+        <a href="/" class="btn btn-primary">Back to home</a>
+        <a href={`tel:${site.phoneRaw}`} class="btn btn-outline">Call {site.phone}</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .not-found {
+    padding: 7rem 0;
+    text-align: center;
+  }
+
+  .code {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: clamp(4rem, 10vw, 7rem);
+    font-weight: 800;
+    color: var(--color-accent);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .not-found h1 {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    margin-bottom: 1rem;
+  }
+
+  .not-found p {
+    max-width: 480px;
+    margin: 0 auto 2.2rem;
+    color: var(--color-text-soft);
+    line-height: 1.7;
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.9rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

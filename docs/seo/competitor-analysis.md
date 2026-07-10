@@ -47,11 +47,16 @@
 
 ## Estado técnico de nuestra web (auditoría rápida)
 
-- `public/robots.txt` apunta a `https://professional-roofing.onrender.com/sitemap-index.xml` pero el site es `pcdmv.com` y **no existe integración `@astrojs/sitemap`** → sitemap roto.
-- `Layout.astro` sin **JSON-LD** (falta schema `RoofingContractor`/`LocalBusiness` con NAP, horario, licencias DC #410526000160 / MD #152249, área de servicio).
-- OG image referencia `/og.jpg` que **no existe** en `public/`.
-- Titles sin ciudad/keyword local.
-- Sin páginas por ciudad/condado, sin blog, sin página de reseñas ni FAQ.
+- ~~`public/robots.txt` apunta a onrender.com (404) y no existe integración `@astrojs/sitemap`~~ → **CORREGIDO 2026-07-10**: sitemap generado en `/sitemap-index.xml`, robots.txt actualizado.
+- ~~Canónicas con `pcdmv.com` sin www mientras el dominio redirige a `www.pcdmv.com`~~ → **CORREGIDO**: `site: 'https://www.pcdmv.com'`.
+- ~~`Layout.astro` sin JSON-LD~~ → **CORREGIDO**: schema `RoofingContractor` global (NAP Lanham MD, horario, licencias, areaServed, Yelp en sameAs) + `Service` y `BreadcrumbList` en páginas de servicio.
+- ~~OG image `/og.jpg` no existe~~ → **CORREGIDO**: generada (1200×630) + og:site_name, og:locale, twitter:image, dimensiones.
+- ~~Titles sin ciudad/keyword local~~ → **CORREGIDO**: portada "Roofing Contractor in Lanham, MD | …", servicios "{Servicio} in Maryland, VA & DC | …".
+- ~~Sin página 404~~ → **CORREGIDO**.
+- Pendiente (decisión del equipo): H1/copy del hero sin keyword "roofing" — se hará en local.
+- Sin páginas por ciudad/condado, sin blog, sin página de reseñas ni FAQ (fase 2).
+- Verificar Google Search Console y enviar el sitemap tras el deploy (requiere acceso DNS del dominio).
+- Dato de campo (2026-07-10): búsqueda manual "roofing lanham maryland" → pcdmv.com no aparece en ningún resultado; consistente con no-indexación.
 
 ## Plan de acción recomendado
 
