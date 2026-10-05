@@ -1,155 +1,122 @@
 ---
 import { Image } from 'astro:assets';
 import { site } from '../data/site';
-import hero01 from '../assets/hero/hero-01.jpg';
+import Icon from './Icon.astro';
+import heroHouse from '../assets/hero/home-stone-estate.jpg';
 ---
 
 <section class="hero">
-  <Image
-    src={hero01}
-    alt="Roof at sunset over a residential home"
-    class="hero-bg"
-    loading="eager"
-    fetchpriority="high"
-    widths={[768, 1280, 1600, 1920]}
-    sizes="100vw"
-  />
-  <div class="hero-overlay"></div>
-
-  <div class="container hero-inner">
-    <span class="hero-eyebrow">Roofing · Siding · Gutters · Remodeling</span>
-    <h1 class="hero-title">Transform your home.<br />Built to last.</h1>
-    <p class="hero-lead">
-      Family-owned roofing and exterior specialists protecting homes across Maryland,
-      Virginia, and the DC metro area for over a decade.
-    </p>
-
-    <div class="hero-cta">
-      <a href="/#contact" class="btn btn-accent">Get a Free Estimate →</a>
-      <a href={`tel:${site.phoneRaw}`} class="btn btn-outline">Call {site.phone}</a>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <h1 class="hero-title">Roofing and siding contractor in Lanham, MD</h1>
+      <p class="hero-lead">
+        New roofs, James Hardie siding and seamless gutters across Prince George’s County and
+        DC since {site.founded}.
+      </p>
+      <div class="hero-cta">
+        <a href="/#contact" class="btn btn-accent">
+          Free estimate
+          <Icon name="arrow-right" size={18} />
+        </a>
+        <a href={`tel:${site.phoneRaw}`} class="btn btn-ghost">
+          <Icon name="phone" size={18} />
+          {site.phone}
+        </a>
+      </div>
     </div>
 
-    <ul class="hero-stats">
-      <li>
-        <strong>12+</strong>
-        <span>Years in business</span>
-      </li>
-      <li>
-        <strong>500+</strong>
-        <span>Projects completed</span>
-      </li>
-      <li>
-        <strong>100%</strong>
-        <span>Licensed &amp; insured</span>
-      </li>
-    </ul>
+    <div class="hero-media">
+      <Image
+        src={heroHouse}
+        alt="Two-story stone and siding home with a new architectural shingle roof and wraparound porch"
+        class="hero-img"
+        loading="eager"
+        fetchpriority="high"
+        widths={[640, 960, 1280, 1600, 2000]}
+        sizes="(min-width: 1024px) 58vw, 100vw"
+        quality={72}
+      />
+    </div>
   </div>
 </section>
 
 <style>
   .hero {
-    position: relative;
-    color: #fff;
-    padding: 7rem 0 6rem;
-    overflow: hidden;
-    isolation: isolate;
+    background: var(--color-bg);
+    padding: 3rem 0 3.5rem;
   }
 
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -2;
-  }
-
-  .hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(10, 23, 51, 0.9) 0%,
-      rgba(18, 37, 73, 0.7) 55%,
-      rgba(30, 58, 110, 0.55) 100%
-    );
-    z-index: -1;
-  }
-
-  .hero-inner {
-    max-width: 880px;
-    animation: fadeUp 0.8s ease both;
-  }
-
-  .hero-eyebrow {
-    display: inline-block;
-    font-family: var(--font-heading);
-    font-size: 0.78rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.25em;
-    color: var(--color-accent-soft);
-    margin-bottom: 1.5rem;
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 3.5rem;
+    align-items: center;
   }
 
   .hero-title {
-    font-size: clamp(2.6rem, 6vw, 4.6rem);
+    font-size: clamp(2.2rem, 4vw, 3.3rem);
     font-weight: 700;
-    line-height: 1.05;
+    line-height: 1.08;
     letter-spacing: -0.025em;
-    color: #fff;
-    margin-bottom: 1.6rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 1.25rem;
+    text-wrap: balance;
   }
 
   .hero-lead {
-    font-size: 1.18rem;
-    max-width: 600px;
-    color: rgba(255, 255, 255, 0.88);
+    font-size: 1.15rem;
     line-height: 1.6;
-    margin-bottom: 2.5rem;
+    color: var(--color-text-soft);
+    max-width: 34ch;
+    margin-bottom: 2rem;
   }
 
   .hero-cta {
     display: flex;
-    gap: 0.9rem;
     flex-wrap: wrap;
-    margin-bottom: 3.5rem;
+    gap: 0.75rem;
   }
 
-  .hero-stats {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(3, max-content);
-    gap: 3rem;
-    padding-top: 2.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.18);
+  .hero-cta .btn:active {
+    transform: translateY(1px);
   }
 
-  .hero-stats strong {
+  .hero-media {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--color-bg-soft);
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 45% 60%;
     display: block;
-    font-family: var(--font-heading);
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--color-accent-soft);
-    line-height: 1;
   }
 
-  .hero-stats span {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: rgba(255, 255, 255, 0.78);
-    margin-top: 0.4rem;
-    display: inline-block;
-  }
-
-  @media (max-width: 900px) {
+  @media (max-width: 1023px) {
     .hero {
-      padding: 4.5rem 0 4.5rem;
+      padding: 1.25rem 0 2.5rem;
     }
-    .hero-stats {
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem 2rem;
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+    .hero-media {
+      order: -1;
+      aspect-ratio: 16 / 10;
+    }
+    .hero-lead {
+      max-width: 52ch;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-cta .btn {
+      flex: 1 1 100%;
     }
   }
 </style>

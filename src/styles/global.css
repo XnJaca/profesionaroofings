@@ -12,6 +12,8 @@
   --color-accent: #2563eb;
   --color-accent-dark: #1d4ed8;
   --color-accent-soft: #60a5fa;
+  /* green from the logo check mark, used for labels like on social posts */
+  --color-brand-green: #8bb718;
 
   /* neutrals */
   --color-bg: #ffffff;
@@ -129,6 +131,7 @@ p {
 }
 
 .section-title {
+  text-wrap: balance;
   font-size: clamp(1.95rem, 4vw, 3rem);
   margin-bottom: 1.2rem;
   max-width: 720px;

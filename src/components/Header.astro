@@ -1,40 +1,16 @@
 ---
 import { site } from '../data/site';
+import Icon from './Icon.astro';
 ---
-
-<div class="topbar">
-  <div class="container topbar-inner">
-    <ul class="topbar-licenses" aria-label="Licenses">
-      {
-        site.licenses.map((l) => (
-          <li class="lic">
-            <span class="lic-label">{l.label}</span>
-            <span class="lic-num">
-              {l.jurisdiction ? `${l.jurisdiction} – ` : ''}
-              {l.number}
-            </span>
-          </li>
-        ))
-      }
-    </ul>
-    <div class="topbar-contact">
-      <a href={`tel:${site.phoneRaw}`}>📞 {site.phone}</a>
-    </div>
-  </div>
-</div>
 
 <header class="nav" id="site-header">
   <div class="container nav-inner">
     <a href="/" class="logo" aria-label={`${site.name} home`}>
-      <img
-        src="/logo.png"
-        alt={`${site.name} logo`}
-        class="logo-img"
-        width="220"
-        height="146"
-        loading="eager"
-        decoding="async"
-      />
+      <img src="/logo-mark.png" alt="" class="logo-mark" width="91" height="40" decoding="async" />
+      <span class="logo-text">
+        <span class="logo-name">Professional Construction</span>
+        <span class="logo-sub">Roofing, siding &amp; remodeling</span>
+      </span>
     </a>
 
     <nav class="nav-links" id="primary-nav" aria-label="Primary">
@@ -43,7 +19,11 @@ import { site } from '../data/site';
       <a href="/#about">About</a>
       <a href="/#projects">Projects</a>
       <a href="/#contact">Contact</a>
-      <a href="/#contact" class="btn btn-accent nav-cta">Free Estimate</a>
+      <a href={`tel:${site.phoneRaw}`} class="nav-phone">
+        <Icon name="phone" size={18} />
+        {site.phone}
+      </a>
+      <a href="/#contact" class="btn btn-accent nav-cta">Free estimate</a>
     </nav>
 
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
@@ -55,81 +35,6 @@ import { site } from '../data/site';
 </header>
 
 <style>
-  .topbar {
-    background: var(--color-primary-dark);
-    color: rgba(255, 255, 255, 0.92);
-    font-size: 0.82rem;
-    padding: 0.55rem 0;
-    letter-spacing: 0.02em;
-  }
-
-  .topbar-inner {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .topbar-licenses {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0 1.1rem;
-    margin: 0;
-    padding: 0;
-  }
-
-  .topbar-licenses .lic {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    position: relative;
-    padding-left: 0.95rem;
-  }
-
-  .topbar-licenses .lic::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--color-accent-soft);
-    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
-  }
-
-  .lic-label {
-    color: rgba(255, 255, 255, 0.55);
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    font-weight: 500;
-  }
-
-  .lic-num {
-    font-family: var(--font-heading);
-    font-weight: 600;
-    color: #fff;
-    letter-spacing: 0.03em;
-  }
-
-  .topbar-contact {
-    margin-left: auto;
-    display: flex;
-    gap: 1.2rem;
-    font-family: var(--font-heading);
-    font-weight: 600;
-  }
-
-  .topbar-contact a {
-    transition: color 0.2s;
-  }
-
-  .topbar-contact a:hover {
-    color: var(--color-accent-soft);
-  }
-
   .nav {
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(10px);
@@ -143,42 +48,66 @@ import { site } from '../data/site';
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 0;
+    min-height: 68px;
+    padding: 0.6rem 0;
     gap: 1.5rem;
   }
 
   .logo {
     display: flex;
     align-items: center;
+    gap: 0.7rem;
     color: var(--color-primary);
-    height: 72px;
-    width: 220px;
-    overflow: hidden;
+    flex-shrink: 0;
   }
 
-  .logo-img {
-    height: 72px;
-    width: 100%;
-    object-fit: contain;
+  .logo-mark {
+    height: 34px;
+    width: auto;
     display: block;
-    transform: scale(2.1);
-    transform-origin: center center;
   }
 
-  @media (max-width: 540px) {
-    .logo {
-      height: 58px;
-      width: 180px;
-    }
-    .logo-img {
-      height: 58px;
+  .logo-text {
+    display: grid;
+    line-height: 1.1;
+  }
+
+  .logo-name {
+    font-family: var(--font-heading);
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .logo-sub {
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .nav-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-primary) !important;
+    font-weight: 600 !important;
+  }
+
+  .nav-phone::after {
+    display: none;
+  }
+
+  @media (max-width: 1100px) and (min-width: 901px) {
+    .nav-links a:not(.nav-cta):not(.nav-phone) {
+      display: none;
     }
   }
 
   .nav-links {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 1.75rem;
   }
 
   .nav-links a {
@@ -209,9 +138,10 @@ import { site } from '../data/site';
     width: 100%;
   }
 
-  .nav-cta {
-    padding: 0.65rem 1.2rem;
-    font-size: 0.82rem;
+  .nav-links a.nav-cta {
+    padding: 0.6rem 1.15rem;
+    font-size: 0.85rem;
+    color: #fff;
   }
 
   .nav-toggle {
@@ -229,23 +159,6 @@ import { site } from '../data/site';
   }
 
   @media (max-width: 900px) {
-    .topbar-inner {
-      justify-content: center;
-      text-align: center;
-    }
-
-    .topbar-licenses {
-      justify-content: center;
-      gap: 0.15rem 0.9rem;
-      width: 100%;
-    }
-
-    .topbar-contact {
-      margin-left: 0;
-      width: 100%;
-      justify-content: center;
-    }
-
     .nav-toggle {
       display: flex;
     }

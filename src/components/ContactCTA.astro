@@ -1,47 +1,37 @@
 ---
 import { site, contacts } from '../data/site';
+import Icon from './Icon.astro';
 ---
 
 <section class="cta" id="contact">
   <div class="container">
     <div class="grid">
       <div class="copy">
-        <span class="eyebrow">Free estimate</span>
-        <h2>
-          Ready to protect <span class="text-accent">your home?</span>
-        </h2>
+        <h2>Tell us about your project</h2>
         <p>
-          Get a no-pressure quote within 24 hours. Available across Maryland, Virginia, and
-          Washington DC. Insurance claims welcome.
+          We reply within 24 hours with a time to come out and measure. Estimates are free and
+          insurance claims are welcome.
         </p>
 
         <ul class="contact-list">
           {
             contacts.map((c) => (
               <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13 1.05.37 2.07.72 3.04a2 2 0 01-.45 2.11L8.09 10.2a16 16 0 006 6l1.34-1.29a2 2 0 012.11-.45c.97.35 2 .59 3.04.72A2 2 0 0122 16.92z" />
-                </svg>
+                <Icon name="phone" size={20} />
                 <a href={`tel:${c.phoneRaw}`}>
                   {c.phone}
-                  <em>· {c.name}, {c.role}</em>
+                  <em>{c.name}, {c.role}</em>
                 </a>
               </li>
             ))
           }
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-              <polyline points="22,6 12,13 2,6" />
-            </svg>
+            <Icon name="envelope-simple" size={20} />
             <a href={`mailto:${site.email}`}>{site.email}</a>
           </li>
           <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
-            <span>{site.city} — Serving {site.serviceArea}</span>
+            <Icon name="map-pin" size={20} />
+            <span>Based in {site.city}. Serving Maryland, DC and Virginia.</span>
           </li>
         </ul>
       </div>
@@ -167,7 +157,7 @@ import { site, contacts } from '../data/site';
     margin-left: 0.35rem;
   }
 
-  .contact-list svg {
+  .contact-list :global(svg) {
     width: 18px;
     height: 18px;
     color: var(--color-accent-soft);
@@ -312,6 +302,15 @@ import { site, contacts } from '../data/site';
 <script>
   const form = document.querySelector<HTMLFormElement>('form[data-form]');
   if (form) {
+    // The 3D exterior studio hands over the chosen layer and colors.
+    window.addEventListener('studio:quote', (e) => {
+      const { service, message } = (e as CustomEvent<{ service: string; message: string }>).detail;
+      const select = form.querySelector<HTMLSelectElement>('select[name=service]');
+      const textarea = form.querySelector<HTMLTextAreaElement>('textarea[name=message]');
+      if (select && [...select.options].some((o) => o.value === service)) select.value = service;
+      if (textarea && !textarea.value.trim()) textarea.value = message;
+    });
+
     const status = form.querySelector<HTMLElement>('[data-status]');
     const submit = form.querySelector<HTMLButtonElement>('button[type=submit]');
     const originalText = submit?.textContent ?? 'Send Request';
@@ -345,7 +344,7 @@ import { site, contacts } from '../data/site';
         submit.textContent = originalText;
         status.classList.add('is-error');
         status.textContent =
-          'Something went wrong. Please call or WhatsApp us — we are happy to help.';
+          'Something went wrong. Please call or message us on WhatsApp.';
       }
     });
   }

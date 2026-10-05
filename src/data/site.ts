@@ -22,11 +22,11 @@ export const site = {
   licenseShort: 'DC · MD · PLBG Licensed',
   serviceArea: 'Maryland · Virginia · Washington DC',
   city: 'Lanham, MD',
-  hours: 'Mon – Sat · 8AM – 6PM',
+  hours: 'Mon to Sat, 8AM to 6PM',
   founded: 2012,
   social: {
-    facebook: '#',
-    instagram: '#',
+    facebook: 'https://www.facebook.com/professionalcons/',
+    instagram: 'https://www.instagram.com/professionalconstructionllc/',
   },
 } as const;
 

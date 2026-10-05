@@ -2,18 +2,15 @@ import type { ImageMetadata } from 'astro';
 
 // asphalt-shingles
 import asph01 from '../assets/services/asphalt-shingles/01.jpg';
-import asph02 from '../assets/services/asphalt-shingles/02.jpg';
-import asph03 from '../assets/services/asphalt-shingles/03.jpg';
-import asph04 from '../assets/services/asphalt-shingles/04.jpg';
 import asph05 from '../assets/services/asphalt-shingles/05.jpg';
-import asph06 from '../assets/services/asphalt-shingles/06.jpg';
-import asph07 from '../assets/services/asphalt-shingles/07.jpg';
+import asphCape from '../assets/services/asphalt-shingles/cape-cod-porch.jpg';
+import asphRancher from '../assets/services/asphalt-shingles/brick-rancher.jpg';
+import asphTan from '../assets/services/asphalt-shingles/tan-rancher.jpg';
 
 // tpo-roofing
 import tpo01 from '../assets/services/tpo-roofing/01.jpg';
 import tpo02 from '../assets/services/tpo-roofing/02.jpg';
 import tpo03 from '../assets/services/tpo-roofing/03.jpg';
-import tpo04 from '../assets/services/tpo-roofing/04.jpg';
 
 // siding
 import sid01 from '../assets/services/siding/01.jpg';
@@ -83,7 +80,7 @@ export const services: Service[] = [
     summary:
       'Premium asphalt shingle roofing installed by certified crews. Durable, beautiful, and built to weather every season in the DMV.',
     description: [
-      'Asphalt shingles remain the #1 roofing choice for homeowners across Maryland, Virginia, and DC — combining cost-effectiveness, durability, and a wide range of architectural styles.',
+      'Asphalt shingles remain the #1 roofing choice for homeowners across Maryland, Virginia, and DC. They combine cost-effectiveness, durability, and a wide range of architectural styles.',
       'Our crews install architectural and 3-tab shingles with manufacturer-grade underlayment, proper ventilation, and meticulous flashing. Every roof we deliver is backed by a 10-year workmanship warranty on top of the manufacturer’s material warranty.',
     ],
     features: [
@@ -93,22 +90,20 @@ export const services: Service[] = [
       'Flashing, valleys, and chimney waterproofing',
       'Insurance claim assistance',
     ],
-    cover: asph01,
-    coverAlt: 'New asphalt shingle roof installed on a brick home',
+    cover: asphCape,
+    coverAlt: 'Cape Cod home with a new gray architectural shingle roof and front porch',
     gallery: [
-      { src: asph01, alt: 'Newly installed asphalt shingle roof on brick home' },
-      { src: asph02, alt: 'Asphalt shingle roof aerial view with proper ridge alignment' },
-      { src: asph03, alt: 'Dramatic ridge of asphalt shingle roof at sunset' },
-      { src: asph04, alt: 'Top-down view of asphalt shingle installation' },
-      { src: asph05, alt: 'Asphalt shingles meeting brick chimney with flashing' },
-      { src: asph06, alt: 'Ridge of asphalt shingle roof with ventilation' },
-      { src: asph07, alt: 'Asphalt shingle roof edge with seamless gutter' },
+      { src: asphCape, alt: 'Cape Cod home with a new gray architectural shingle roof' },
+      { src: asphRancher, alt: 'Brick rancher with a new dark asphalt shingle roof' },
+      { src: asphTan, alt: 'Ranch home with a new brown architectural shingle roof and porch' },
+      { src: asph01, alt: 'New shingles meeting a brick wall with step flashing' },
+      { src: asph05, alt: 'Asphalt shingles meeting a brick chimney with flashing' },
     ],
     icon: 'roof',
   },
   {
     slug: 'tpo-roofing',
-    name: 'TPO Roofing — Commercial & Residential',
+    name: 'TPO Roofing for Commercial & Residential',
     shortName: 'TPO Roofing',
     tagline: 'Flat roof systems for commercial and residential buildings',
     summary:
@@ -130,7 +125,6 @@ export const services: Service[] = [
       { src: tpo01, alt: 'Commercial TPO roof installation with vents' },
       { src: tpo02, alt: 'Large white TPO membrane on industrial building' },
       { src: tpo03, alt: 'TPO roof on a residential addition' },
-      { src: tpo04, alt: 'TPO flat section transitioning into shingle roof' },
     ],
     icon: 'tpo',
   },
@@ -140,10 +134,10 @@ export const services: Service[] = [
     shortName: 'James Hardie Siding',
     tagline: 'Fiber cement siding that lasts a generation',
     summary:
-      'Certified installation of James Hardie® fiber cement siding — the industry’s most trusted system for curb appeal, weather resistance, and fire safety.',
+      'Certified installation of James Hardie® fiber cement siding, the industry’s most trusted system for curb appeal, weather resistance, and fire safety.',
     description: [
       'James Hardie® fiber cement siding combines the warmth of natural wood with the strength of engineered fiber cement. It’s non-combustible, resistant to rot and pests, and comes with a 30-year limited warranty.',
-      'We handle full exterior re-cladding — including weather barrier installation (Tyvek HomeWrap), trim, soffits, and color-matched touch-ups. The result is a transformation that boosts both energy efficiency and resale value.',
+      'We handle full exterior re-cladding, including weather barrier installation (Tyvek HomeWrap), trim, soffits, and color-matched touch-ups. The result is a transformation that boosts both energy efficiency and resale value.',
     ],
     features: [
       'HardiePlank®, HardieShingle® and HardiePanel® systems',
@@ -152,8 +146,8 @@ export const services: Service[] = [
       'Trim, soffit, and fascia replacement',
       '30-year manufacturer warranty',
     ],
-    cover: sid01,
-    coverAlt: 'Two-story home with new James Hardie fiber cement siding',
+    cover: sid05,
+    coverAlt: 'Two-story colonial with blue James Hardie lap siding, brick garage and front porch',
     gallery: [
       { src: sid01, alt: 'Two-story home with James Hardie siding and garage' },
       { src: sid02, alt: 'Front elevation of home with new gray siding' },
@@ -169,9 +163,9 @@ export const services: Service[] = [
     shortName: 'Drywall',
     tagline: 'Smooth, professional drywall installation and finishing',
     summary:
-      'From new construction to repairs, we deliver flawless drywall hanging, taping, mudding, and texturing — ready for paint.',
+      'From new construction to repairs, we deliver flawless drywall hanging, taping, mudding, and texturing, ready for paint.',
     description: [
-      'Quality drywall is the foundation of every great interior. Our finishers hang, tape, and mud to Level 5 finish standards — perfectly smooth, ready for primer and paint.',
+      'Quality drywall is the foundation of every great interior. Our finishers hang, tape, and mud to Level 5 finish standards: perfectly smooth and ready for primer and paint.',
       'We also handle patches and water-damage repairs, blending seamlessly into existing walls. Whether it’s a single bedroom or an entire home, the results are clean, square, and built to last.',
     ],
     features: [
@@ -197,7 +191,7 @@ export const services: Service[] = [
       'Seamless aluminum gutters and high-grade gutter guards that protect your home from water damage year-round.',
     description: [
       'Properly designed gutters direct thousands of gallons of water away from your foundation each year. We fabricate seamless aluminum gutters on-site in custom lengths and colors to match your home perfectly.',
-      'Add gutter guards to keep leaves and debris out for good — eliminating clogs, ice dams, and the annual cleaning chore.',
+      'Add gutter guards to keep leaves and debris out for good. No more clogs, ice dams, or yearly gutter cleaning.',
     ],
     features: [
       'Seamless 5" and 6" aluminum gutters',
@@ -220,10 +214,10 @@ export const services: Service[] = [
     shortName: 'Kitchens',
     tagline: 'Modern, functional kitchens designed around your life',
     summary:
-      'Full kitchen renovations — cabinets, countertops, lighting, and finishes — delivered turn-key by one trusted team.',
+      'Full kitchen renovations, from cabinets and countertops to lighting and finishes, delivered turn-key by one team.',
     description: [
       'The kitchen is the heart of every home. We design and build complete kitchen renovations, from custom cabinetry and quartz countertops to lighting design and appliance integration.',
-      'One contractor manages every trade — demo, plumbing, electrical, tile, and finish carpentry — so your project stays on schedule and on budget.',
+      'One contractor manages every trade (demo, plumbing, electrical, tile, and finish carpentry), so your project stays on schedule and on budget.',
     ],
     features: [
       'Custom and semi-custom cabinetry',
@@ -248,7 +242,7 @@ export const services: Service[] = [
     summary:
       'Complete bathroom renovations with custom tile work, premium fixtures, and waterproof construction that stands the test of time.',
     description: [
-      'A great bathroom blends style with function. We handle full bathroom remodels — walk-in showers, soaking tubs, double vanities, and luxury tile — using proper waterproofing systems (Schluter, Wedi) that prevent leaks for decades.',
+      'A great bathroom blends style with function. We handle full bathroom remodels: walk-in showers, soaking tubs, double vanities, and luxury tile. We use proper waterproofing systems (Schluter, Wedi) that prevent leaks for decades.',
       'From half-baths to primary suites, we deliver projects that feel custom-tailored to your home.',
     ],
     features: [
@@ -271,7 +265,7 @@ export const services: Service[] = [
     shortName: 'Interior Remodels',
     tagline: 'Whole-home renovations, basements, and finish carpentry',
     summary:
-      'Transform any room with our full-service interior team — drywall, flooring, trim, paint, and structural work under one roof.',
+      'Transform any room with our full-service interior team: drywall, flooring, trim, paint, and structural work under one roof.',
     description: [
       'From basement build-outs to formal dining rooms, we handle every layer of interior renovation. Our team specializes in clean transitions between rooms, custom trim and millwork, and the structural work that makes layouts feel intentional.',
       'You get a single point of contact, one schedule, and one team that owns the result from demo to final punch-list.',
@@ -302,7 +296,7 @@ export const services: Service[] = [
     summary:
       'Pressure-treated, composite, and rooftop decks designed for your lifestyle and engineered for the long haul.',
     description: [
-      'A well-built deck extends your living space outdoors. We design and build pressure-treated, cedar, and composite decks — from ground-level patios to multi-level rooftop entertainment spaces.',
+      'A well-built deck extends your living space outdoors. We design and build pressure-treated, cedar, and composite decks, from ground-level patios to multi-level rooftop entertainment spaces.',
       'Every deck we deliver is permitted, inspected, and built to current code, with proper footings, joist hangers, and ledger flashing that protects against water intrusion.',
     ],
     features: [
@@ -328,7 +322,7 @@ export const services: Service[] = [
     shortName: 'Additions',
     tagline: 'Build the space you’ve been dreaming of',
     summary:
-      'Room additions, second-story expansions, and full new builds — managed by a contractor who handles every trade.',
+      'Room additions, second-story expansions, and full new builds, managed by a contractor who handles every trade.',
     description: [
       'When your home no longer fits your life, we build the addition that does. From mudrooms and primary suites to detached garages and second-story expansions, our team manages design, permits, structural engineering, and construction.',
       'We coordinate every trade and inspection so you don’t have to. The result is an addition that looks like it was always part of the home.',

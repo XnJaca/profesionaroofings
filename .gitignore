@@ -20,9 +20,14 @@ pnpm-debug.log*
 # macOS
 .DS_Store
 
+# internal business docs (never publish)
+
 # original raw assets (kept locally as reference only)
 servicios/
 proroofings_estilo_1.html
 /logo.png
 /logo.jpeg
 /logo_complete.jpeg
+
+# vercel build output
+.vercel/

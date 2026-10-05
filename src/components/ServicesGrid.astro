@@ -1,48 +1,62 @@
 ---
 import { Image } from 'astro:assets';
 import { services } from '../data/services';
+import Icon from './Icon.astro';
+
+const bySlug = (slug: string) => services.find((s) => s.slug === slug)!;
+const exterior = ['asphalt-shingles', 'siding', 'gutters', 'tpo-roofing'].map(bySlug);
+const more = ['kitchen-remodeling', 'bathroom-remodeling', 'interior-remodeling', 'decks-porches', 'additions', 'drywall'].map(bySlug);
 ---
 
 <section class="services" id="services">
   <div class="container">
-    <header class="section-header">
-      <span class="eyebrow">What we do</span>
-      <h2 class="section-title">Complete exterior &amp; interior solutions</h2>
+    <header class="head">
+      <h2 class="section-title">Roofing, siding and gutters</h2>
       <p class="section-lead">
-        From a single shingle replacement to a full home addition, we handle every project with
-        the same care and craftsmanship — one trusted team for every trade.
+        Most of our work is on the outside of the house. The same crew handles remodels inside, too.
       </p>
     </header>
 
-    <ul class="grid">
+    <ul class="exterior" role="list">
       {
-        services.map((service) => (
-          <li class="card">
-            <a href={`/services/${service.slug}/`} class="card-link">
-              <span class="card-image">
-                <Image
-                  src={service.cover}
-                  alt={service.coverAlt}
-                  widths={[400, 600, 800]}
-                  sizes="(min-width: 1100px) 400px, (min-width: 700px) 50vw, 100vw"
-                />
-              </span>
-              <div class="card-body">
-                <h3>{service.name}</h3>
-                <p>{service.summary}</p>
-                <span class="card-link-label">
-                  Learn more
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
-                </span>
+        exterior.map((service, i) => (
+          <li class={`tile tile-${i}`}>
+            <a href={`/services/${service.slug}/`}>
+              <Image
+                src={service.cover}
+                alt={service.coverAlt}
+                widths={i === 0 ? [600, 900, 1200, 1600] : [400, 600, 900]}
+                sizes={i === 0 ? '(min-width: 1024px) 58vw, 100vw' : '(min-width: 1024px) 40vw, 100vw'}
+              />
+              <div class="tile-body">
+                <h3>{service.shortName}</h3>
+                <p>{service.tagline}</p>
               </div>
             </a>
           </li>
         ))
       }
     </ul>
+
+    <div class="more">
+      <h3 class="more-title">Inside the house</h3>
+      <ul class="more-list" role="list">
+        {
+          more.map((service) => (
+            <li>
+              <a href={`/services/${service.slug}/`}>
+                <Image src={service.cover} alt="" widths={[160, 240]} sizes="80px" class="thumb" />
+                <span>
+                  <strong>{service.shortName}</strong>
+                  <small>{service.tagline}</small>
+                </span>
+                <Icon name="arrow-right" size={18} class="arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -52,102 +66,162 @@ import { services } from '../data/services';
     background: var(--color-bg);
   }
 
-  .grid {
+  .head {
+    margin-bottom: 2.5rem;
+  }
+
+  .exterior {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: 7fr 5fr;
+    grid-template-rows: repeat(3, minmax(190px, auto));
+    gap: 1rem;
   }
 
-  .card {
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
+  .tile-0 {
+    grid-row: span 3;
+  }
+
+  .tile a {
+    position: relative;
+    display: block;
+    height: 100%;
+    min-height: 190px;
     border-radius: var(--radius-lg);
     overflow: hidden;
-    transition:
-      transform 0.28s ease,
-      box-shadow 0.28s ease,
-      border-color 0.28s ease;
+    color: #fff;
+    background: var(--color-primary-dark);
   }
 
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--color-border-strong);
-  }
-
-  .card-link {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    color: inherit;
-  }
-
-  .card-image {
-    display: block;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    background: var(--color-bg-soft);
-  }
-
-  .card-image :global(img) {
+  .tile :global(img) {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.55s ease;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .card:hover .card-image :global(img) {
-    transform: scale(1.05);
+  .tile a:hover :global(img) {
+    transform: scale(1.04);
   }
 
-  .card-body {
-    padding: 1.8rem 1.7rem 2rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  /* A short scrim only behind the caption, so the photo stays clean. */
+  .tile-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 2.5rem 1.4rem 1.2rem;
+    background: linear-gradient(180deg, transparent, rgba(10, 20, 40, 0.78));
   }
 
-  .card h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.6rem;
+  .tile h3 {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
   }
 
-  .card p {
-    font-size: 0.95rem;
-    color: var(--color-text-soft);
-    line-height: 1.55;
-    margin: 0 0 1.5rem;
-    flex: 1;
+  .tile-0 h3 {
+    font-size: 1.6rem;
   }
 
-  .card-link-label {
-    display: inline-flex;
+  .tile p {
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .more {
+    margin-top: 3.5rem;
+  }
+
+  .more-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .more-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 2.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .more-list a {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--color-border);
+    color: inherit;
+  }
+
+  .more-list :global(.thumb) {
+    width: 64px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+  }
+
+  .more-list span {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .more-list strong {
     font-family: var(--font-heading);
     font-weight: 600;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-primary);
-    transition: color 0.2s ease, gap 0.25s ease;
+    color: var(--color-text);
   }
 
-  .card:hover .card-link-label {
+  .more-list small {
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+  }
+
+  .more-list :global(.arrow) {
+    color: var(--color-text-muted);
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .more-list a:hover :global(.arrow) {
     color: var(--color-accent);
-    gap: 0.75rem;
+    transform: translateX(3px);
   }
 
-  @media (max-width: 1024px) {
-    .grid {
-      grid-template-columns: repeat(2, 1fr);
+  .more-list a:hover strong {
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 900px) {
+    .services {
+      padding: 4rem 0;
+    }
+    .exterior {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: none;
+    }
+    .tile-0 {
+      grid-row: auto;
+      grid-column: 1 / -1;
+    }
+    .tile-0 a {
+      aspect-ratio: 4 / 3;
+    }
+    .more-list {
+      grid-template-columns: 1fr;
     }
   }
 
-  @media (max-width: 640px) {
-    .grid {
+  @media (max-width: 560px) {
+    .exterior {
       grid-template-columns: 1fr;
+    }
+    .tile a {
+      aspect-ratio: 16 / 10;
+      min-height: 0;
     }
   }
 </style>

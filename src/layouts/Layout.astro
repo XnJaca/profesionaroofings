@@ -1,5 +1,12 @@
 ---
+import '@fontsource/poppins/latin-500.css';
+import '@fontsource/poppins/latin-600.css';
+import '@fontsource/poppins/latin-700.css';
+import '@fontsource/roboto/latin-400.css';
+import '@fontsource/roboto/latin-500.css';
+import '@fontsource/roboto/latin-700.css';
 import '../styles/global.css';
+import { businessSchema } from '../data/schema';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FloatingCTA from '../components/FloatingCTA.astro';
@@ -8,15 +15,22 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  /** Extra JSON-LD nodes for this page (Service, BreadcrumbList, FAQPage…). */
+  schema?: Record<string, unknown>[];
 }
 
 const {
   title,
-  description = 'Family-owned roofing, siding, and exterior specialists serving Maryland, Virginia, and DC since 2012. Licensed, insured, and ready for your free estimate.',
-  ogImage = '/og.jpg',
+  description = 'Roofing, siding, and exterior contractor serving Maryland, Virginia, and DC since 2012. Licensed, insured, and ready for your free estimate.',
+  ogImage = "https://pcdmv.com/og.jpg",
+  schema = [],
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [businessSchema, ...schema],
+});
 ---
 
 <!doctype html>
@@ -30,6 +44,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <link rel="canonical" href={canonical} />
 
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Professional Construction LLC" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -43,14 +59,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <link rel="apple-touch-icon" href="/logo.png" />
     <link rel="shortcut icon" href="/logo.png" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="sitemap" href="/sitemap-index.xml" />
 
     <title>{title}</title>
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
   </head>
   <body>
     <Header />

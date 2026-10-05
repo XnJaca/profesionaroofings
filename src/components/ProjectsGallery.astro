@@ -1,48 +1,37 @@
 ---
 import { Image } from 'astro:assets';
-import { services } from '../data/services';
+import stoneEstate from '../assets/hero/stone-estate-side.jpg';
+import blueSiding from '../assets/services/siding/01.jpg';
+import graySiding from '../assets/services/siding/02.jpg';
+import tpoRoof from '../assets/services/tpo-roofing/01.jpg';
+import redDeck from '../assets/services/decks/03.jpg';
+import kitchen from '../assets/services/kitchen/01.jpg';
 
-// Pick one cover image from each of 6 featured services for the gallery
-const featuredSlugs = [
-  'asphalt-shingles',
-  'siding',
-  'kitchen-remodeling',
-  'tpo-roofing',
-  'bathroom-remodeling',
-  'decks-porches',
+// Real jobs only. Label + title sit on the photo, like our social posts.
+const projects = [
+  { src: stoneEstate, label: 'Roofing', title: 'Architectural shingles', href: '/services/asphalt-shingles/', alt: 'Stone and siding home with a new architectural shingle roof' },
+  { src: blueSiding, label: 'Siding', title: 'James Hardie lap siding', href: '/services/siding/', alt: 'Three-story home finished in blue James Hardie lap siding' },
+  { src: tpoRoof, label: 'Flat roofing', title: 'Commercial TPO membrane', href: '/services/tpo-roofing/', alt: 'New white TPO membrane on a commercial building' },
+  { src: graySiding, label: 'Siding', title: 'Siding and trim', href: '/services/siding/', alt: 'Two-story colonial with new gray siding and white trim' },
+  { src: kitchen, label: 'Remodeling', title: 'Kitchen remodel', href: '/services/kitchen-remodeling/', alt: 'Remodeled kitchen with an island and hardwood floors' },
+  { src: redDeck, label: 'Outdoor', title: 'Deck', href: '/services/decks-porches/', alt: 'Large red-stained deck with railings' },
 ];
-
-const featured = featuredSlugs
-  .map((slug) => services.find((s) => s.slug === slug))
-  .filter((s): s is NonNullable<typeof s> => Boolean(s));
 ---
 
 <section class="projects" id="projects">
   <div class="container">
-    <header class="section-header">
-      <span class="eyebrow">Recent work</span>
-      <h2 class="section-title">Projects we&rsquo;re <span class="text-accent">proud of</span>.</h2>
-      <p class="section-lead">
-        A small selection of completed jobs across Maryland, Virginia, and DC. Visit any service
-        page to see the full gallery.
-      </p>
-    </header>
+    <h2 class="section-title">Recent work</h2>
 
-    <ul class="grid">
+    <ul class="masonry" role="list">
       {
-        featured.map((service) => (
-          <li class="tile">
-            <a href={`/services/${service.slug}/`}>
-              <Image
-                src={service.cover}
-                alt={service.coverAlt}
-                widths={[400, 600, 800, 1200]}
-                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              />
-              <div class="tile-info">
-                <small>{service.shortName}</small>
-                <h4>{service.tagline}</h4>
-              </div>
+        projects.map((p) => (
+          <li>
+            <a href={p.href}>
+              <Image src={p.src} alt={p.alt} widths={[400, 600, 900]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" />
+              <span class="tag">
+                <span class="tag-label">{p.label}</span>
+                <span class="tag-title">{p.title}</span>
+              </span>
             </a>
           </li>
         ))
@@ -57,80 +46,81 @@ const featured = featuredSlugs
     padding: 6rem 0;
   }
 
-  .grid {
+  .section-title {
+    margin-bottom: 2.5rem;
+  }
+
+  .masonry {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
   }
 
-  .tile {
+  .masonry a {
     position: relative;
-    aspect-ratio: 4 / 5;
+    display: block;
     border-radius: var(--radius-lg);
     overflow: hidden;
-    background: var(--color-border);
+    color: #fff;
+    background: var(--color-primary-dark);
+    aspect-ratio: 4 / 3;
   }
 
-  .tile a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-
-  .tile :global(img) {
+  .masonry :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s ease;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .tile a::after {
-    content: '';
+  .masonry a:hover :global(img) {
+    transform: scale(1.04);
+  }
+
+  /* Same treatment as the social posts: navy fade at the bottom,
+     green bar + uppercase category, bold white title. */
+  .tag {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(10, 23, 51, 0.86) 0%, transparent 55%);
-    transition: opacity 0.3s;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    gap: 0.3rem;
+    padding: 3.5rem 1.25rem 1.1rem;
+    background: linear-gradient(180deg, transparent, rgba(18, 37, 73, 0.55) 40%, rgba(18, 37, 73, 0.9));
   }
 
-  .tile:hover :global(img) {
-    transform: scale(1.05);
-  }
-
-  .tile-info {
-    position: absolute;
-    bottom: 1.4rem;
-    left: 1.4rem;
-    right: 1.4rem;
-    color: #fff;
-    z-index: 1;
-  }
-
-  .tile-info small {
+  .tag-label {
     font-family: var(--font-heading);
     font-size: 0.72rem;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: var(--color-accent-soft);
+    padding-left: 0.6rem;
+    border-left: 3px solid var(--color-brand-green);
+    line-height: 1.1;
   }
 
-  .tile-info h4 {
+  .tag-title {
     font-family: var(--font-heading);
     font-size: 1.15rem;
-    margin-top: 0.35rem;
-    color: #fff;
+    font-weight: 700;
+    line-height: 1.2;
   }
 
-  @media (max-width: 1024px) {
-    .grid {
+  @media (max-width: 900px) {
+    .projects {
+      padding: 4rem 0;
+    }
+    .masonry {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
-  @media (max-width: 600px) {
-    .grid {
+  @media (max-width: 560px) {
+    .masonry {
       grid-template-columns: 1fr;
     }
   }

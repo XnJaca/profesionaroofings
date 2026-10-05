@@ -1,0 +1,635 @@
+---
+import { studioLayers } from '../data/studio';
+
+const first = studioLayers[0];
+---
+
+<section class="studio" id="studio" data-studio>
+  <div class="container">
+    <header class="section-header">
+      <span class="eyebrow">Exterior studio</span>
+      <h2 class="section-title">See your new exterior before we start</h2>
+      <p class="section-lead">
+        Pick a siding, roof and gutter color and watch a Maryland colonial get rebuilt course by
+        course. Drag the house to look around, then send us your combination for a free estimate.
+      </p>
+    </header>
+
+    <div class="studio-grid">
+      <div class="panel">
+        <div class="tabs" role="tablist" aria-label="Exterior layer">
+          {
+            studioLayers.map((layer, i) => (
+              <button type="button" role="tab" class="tab" aria-selected={i === 0 ? 'true' : 'false'} data-pick={layer.key}>
+                {layer.short}
+              </button>
+            ))
+          }
+        </div>
+
+        {
+          studioLayers.map((layer, i) => (
+            <div class="swatches" data-colors={layer.key} hidden={i !== 0}>
+              <p class="swatch-label">
+                {layer.swatchLabel} · <strong data-color-name>{layer.swatches[0].name}</strong>
+              </p>
+              <div class="swatch-row" role="radiogroup" aria-label={layer.swatchLabel}>
+                {layer.swatches.map((s, j) => (
+                  <button
+                    type="button"
+                    role="radio"
+                    class="swatch"
+                    style={`--swatch:${s.hex}`}
+                    aria-checked={j === 0 ? 'true' : 'false'}
+                    aria-label={s.name}
+                    title={s.name}
+                    data-swatch={s.hex}
+                    data-name={s.name}
+                  />
+                ))}
+              </div>
+            </div>
+          ))
+        }
+
+        <h3 class="layer-title" data-title>{first.title}</h3>
+        <p class="layer-body" data-body>{first.body}</p>
+        <ul class="facts" data-facts>
+          {first.facts.map((f) => <li>{f}</li>)}
+        </ul>
+
+        <div class="panel-cta">
+          <a href="/#contact" class="btn btn-accent" data-cta>
+            <span data-cta-label>Quote {first.short.toLowerCase()} in {first.swatches[0].name}</span>
+          </a>
+          <a href={`/services/${first.slug}/`} class="learn" data-learn>
+            Learn about <span data-learn-label>{first.short.toLowerCase()}</span> →
+          </a>
+        </div>
+        <p class="note">Colors are on-screen previews. We bring real samples to your free estimate.</p>
+      </div>
+
+      <div class="stage" data-host>
+        <canvas data-canvas aria-label="3D house showing the selected siding, roof and gutter colors"></canvas>
+        <div class="poster" data-poster aria-hidden="true">
+          <span class="spinner"></span>
+          <span data-poster-label>Loading 3D preview…</span>
+        </div>
+        <div class="storm">
+          <button class="storm-btn" type="button" data-storm disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 16.6A5 5 0 0 0 18 7h-1.3A8 8 0 1 0 4 15.3" />
+              <line x1="8" y1="19" x2="8" y2="21" />
+              <line x1="8" y1="13" x2="8" y2="15" />
+              <line x1="16" y1="19" x2="16" y2="21" />
+              <line x1="16" y1="13" x2="16" y2="15" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="12" y1="15" x2="12" y2="17" />
+            </svg>
+            <span data-storm-label>Storm test</span>
+          </button>
+          <span class="storm-bar" aria-hidden="true"><i data-storm-bar></i></span>
+        </div>
+        <p class="hint" aria-hidden="true">Drag to look around</p>
+        <div class="scrub">
+          <span>Before</span>
+          <input type="range" min="0" max="1000" value="0" aria-label="Install progress" data-scrub disabled />
+          <span>After</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { studioLayers, type LayerKey } from '../data/studio';
+  import type { HomeScene } from '../scripts/home/scene';
+
+  const root = document.querySelector<HTMLElement>('[data-studio]');
+  if (root) {
+    const host = root.querySelector<HTMLElement>('[data-host]')!;
+    const canvas = root.querySelector<HTMLCanvasElement>('[data-canvas]')!;
+    const poster = root.querySelector<HTMLElement>('[data-poster]')!;
+    const posterLabel = root.querySelector<HTMLElement>('[data-poster-label]')!;
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-pick]')];
+    const range = root.querySelector<HTMLInputElement>('[data-scrub]')!;
+    const title = root.querySelector<HTMLElement>('[data-title]')!;
+    const body = root.querySelector<HTMLElement>('[data-body]')!;
+    const facts = root.querySelector<HTMLElement>('[data-facts]')!;
+    const cta = root.querySelector<HTMLAnchorElement>('[data-cta]')!;
+    const ctaLabel = root.querySelector<HTMLElement>('[data-cta-label]')!;
+    const learn = root.querySelector<HTMLAnchorElement>('[data-learn]')!;
+    const learnLabel = root.querySelector<HTMLElement>('[data-learn-label]')!;
+    const stormBtn = root.querySelector<HTMLButtonElement>('[data-storm]')!;
+    const stormLabel = root.querySelector<HTMLElement>('[data-storm-label]')!;
+    const stormBar = root.querySelector<HTMLElement>('[data-storm-bar]')!;
+
+    let scene: HomeScene | null = null;
+    let active: LayerKey = 'siding';
+    const chosen = Object.fromEntries(studioLayers.map((l) => [l.key, l.swatches[0]])) as Record<LayerKey, { name: string; hex: string }>;
+    const layer = (key: LayerKey) => studioLayers.find((l) => l.key === key)!;
+
+    function show(key: LayerKey) {
+      active = key;
+      const l = layer(key);
+      tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.pick === key)));
+      root!.querySelectorAll<HTMLElement>('[data-colors]').forEach((el) => (el.hidden = el.dataset.colors !== key));
+      title.textContent = l.title;
+      body.textContent = l.body;
+      facts.replaceChildren(
+        ...l.facts.map((f) => {
+          const li = document.createElement('li');
+          li.textContent = f;
+          return li;
+        }),
+      );
+      learn.href = `/services/${l.slug}/`;
+      learnLabel.textContent = l.short.toLowerCase();
+      ctaLabel.textContent = `Quote ${l.short.toLowerCase()} in ${chosen[key].name}`;
+    }
+
+    tabs.forEach((t) =>
+      t.addEventListener('click', () => {
+        const key = t.dataset.pick as LayerKey;
+        show(key);
+        scene?.select(key);
+      }),
+    );
+
+    root.querySelectorAll<HTMLElement>('[data-colors]').forEach((group) => {
+      const key = group.dataset.colors as LayerKey;
+      const label = group.querySelector<HTMLElement>('[data-color-name]')!;
+      group.querySelectorAll<HTMLButtonElement>('[data-swatch]').forEach((sw) => {
+        sw.addEventListener('click', () => {
+          group.querySelectorAll('[data-swatch]').forEach((o) => o.setAttribute('aria-checked', String(o === sw)));
+          label.textContent = sw.dataset.name!;
+          chosen[key] = { name: sw.dataset.name!, hex: sw.dataset.swatch! };
+          scene?.setColor(key, sw.dataset.swatch!);
+          show(key);
+        });
+      });
+    });
+
+    // Carry the whole combination into the estimate form.
+    cta.addEventListener('click', () => {
+      const summary = studioLayers.map((l) => `${l.short}: ${chosen[l.key].name}`).join(' · ');
+      window.dispatchEvent(
+        new CustomEvent('studio:quote', {
+          detail: { service: layer(active).service, message: `Exterior studio selection: ${summary}.` },
+        }),
+      );
+    });
+
+    function supportsWebGL() {
+      try {
+        const c = document.createElement('canvas');
+        return !!(c.getContext('webgl2') || c.getContext('webgl'));
+      } catch {
+        return false;
+      }
+    }
+
+    async function boot() {
+      if (!supportsWebGL()) {
+        host.classList.add('is-fallback');
+        posterLabel.textContent = '3D preview is not available on this device.';
+        return;
+      }
+      try {
+        const { createHomeScene } = await import('../scripts/home/scene');
+        scene = createHomeScene(canvas, host);
+      } catch (err) {
+        console.error(err);
+        host.classList.add('is-fallback');
+        posterLabel.textContent = '3D preview could not load.';
+        return;
+      }
+      for (const l of studioLayers) scene.setColor(l.key, chosen[l.key].hex);
+      if (active !== 'siding') scene.select(active);
+      host.classList.add('is-ready');
+      poster.hidden = true;
+      range.disabled = false;
+      stormBtn.disabled = false;
+
+      let dragging = false;
+      scene.onProgress((v) => {
+        if (!dragging) range.value = String(Math.round(v * 1000));
+      });
+      scene.onActive((key) => show(key));
+      range.addEventListener('input', () => {
+        dragging = true;
+        scene!.scrub(Number(range.value) / 1000);
+      });
+      range.addEventListener('change', () => (dragging = false));
+      canvas.addEventListener('pointerdown', () => root!.classList.add('has-dragged'), { once: true });
+
+      stormBtn.addEventListener('click', () => {
+        stormBtn.disabled = true;
+        host.classList.add('is-storm');
+        scene!.playStorm();
+      });
+      scene.onStorm((p, running) => {
+        stormBar.style.transform = `scaleX(${p})`;
+        stormLabel.textContent = running ? (p < 0.75 ? 'Storm, timelapse' : 'Clearing up') : 'Storm test';
+        if (!running) {
+          stormBtn.disabled = false;
+          host.classList.remove('is-storm');
+        }
+      });
+    }
+
+    // three.js only downloads when the studio is about to scroll into view.
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          boot();
+        }
+      },
+      { rootMargin: '400px 0px' },
+    );
+    io.observe(host);
+  }
+</script>
+
+<style>
+  .studio {
+    padding: 6rem 0;
+    background: var(--color-bg-alt);
+    overflow: hidden;
+  }
+
+  .studio-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  /* ---------- panel ---------- */
+  .panel {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+    padding: 0.25rem;
+    background: var(--color-bg-soft);
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+  }
+
+  .tab {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-soft);
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 0.25rem;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .tab:hover {
+    color: var(--color-primary);
+  }
+
+  .tab[aria-selected='true'] {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .tab:focus-visible,
+  .swatch:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .swatch-label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .swatch-label strong {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .swatch-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .swatch {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--swatch);
+    border: 1px solid rgba(17, 24, 39, 0.18);
+    box-shadow: inset 0 -6px 10px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .swatch:hover {
+    transform: scale(1.08);
+  }
+
+  .swatch[aria-checked='true'] {
+    box-shadow:
+      0 0 0 2px var(--color-bg),
+      0 0 0 4px var(--color-accent);
+  }
+
+  .layer-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .layer-body {
+    color: var(--color-text-soft);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .facts {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .facts li {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    background: var(--color-bg-soft);
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem;
+  }
+
+  .panel-cta {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+  }
+
+  .panel-cta .btn {
+    white-space: normal;
+    text-align: center;
+  }
+
+  .learn {
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .learn:hover {
+    color: var(--color-accent);
+  }
+
+  .note {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    margin-top: 1rem;
+  }
+
+  /* ---------- stage ---------- */
+  .stage {
+    position: relative;
+    min-height: 560px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: linear-gradient(180deg, #bcd3e8 0%, #dfe9f3 55%, #eef3f8 100%);
+    border: 1px solid var(--color-border);
+    touch-action: pan-y;
+    isolation: isolate;
+  }
+
+  .stage::before,
+  .stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .stage::before {
+    background: linear-gradient(180deg, #3d4955 0%, #6b7784 60%, #8a95a0 100%);
+    opacity: calc(var(--storm, 0) * 0.92);
+  }
+
+  .stage::after {
+    background: radial-gradient(ellipse at 30% 10%, rgba(235, 242, 255, 0.95), transparent 70%);
+    opacity: var(--flash, 0);
+    mix-blend-mode: screen;
+    z-index: 2;
+  }
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 1;
+    cursor: grab;
+  }
+
+  canvas:active {
+    cursor: grabbing;
+  }
+
+  .poster[hidden] {
+    display: none;
+  }
+
+  .poster {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.8rem;
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .spinner {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 3px solid rgba(30, 58, 110, 0.18);
+    border-top-color: var(--color-primary);
+    animation: spin 0.9s linear infinite;
+  }
+
+  .is-fallback .spinner {
+    display: none;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .storm {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 4;
+    display: grid;
+    gap: 0.4rem;
+    justify-items: end;
+  }
+
+  .storm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.5rem 0.95rem;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .storm-btn:disabled {
+    cursor: default;
+    opacity: 0.75;
+  }
+
+  .storm-bar {
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .is-storm .storm-bar {
+    opacity: 1;
+  }
+
+  .storm-bar i {
+    display: block;
+    height: 100%;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .hint {
+    position: absolute;
+    left: 50%;
+    top: 1.2rem;
+    transform: translateX(-50%);
+    z-index: 4;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .is-ready .hint {
+    opacity: 1;
+  }
+
+  :global(.has-dragged) .hint {
+    opacity: 0;
+  }
+
+  .scrub {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.55rem 1rem;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .scrub input {
+    flex: 1;
+    accent-color: var(--color-accent);
+    min-width: 0;
+  }
+
+  @media (max-width: 1023px) {
+    .studio-grid {
+      grid-template-columns: 1fr;
+    }
+    .stage {
+      order: -1;
+      min-height: 0;
+      height: clamp(320px, 70vw, 520px);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .studio {
+      padding: 4rem 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .panel {
+      padding: 1.25rem;
+    }
+    .tab {
+      font-size: 0.78rem;
+    }
+    .hint {
+      display: none;
+    }
+  }
+</style>

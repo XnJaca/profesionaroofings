@@ -1,191 +1,141 @@
 ---
 import { Image } from 'astro:assets';
-import hero02 from '../assets/hero/hero-02.jpg';
-import { site } from '../data/site';
+import crewPhoto from '../assets/hero/crew-on-roof.jpg';
+import { site, contacts } from '../data/site';
+import Icon from './Icon.astro';
+
+const owner = contacts.find((c) => c.role === 'Owner')!;
+const manager = contacts.find((c) => c.role === 'Manager')!;
+
+const promises = [
+  { icon: 'receipt', title: 'Written estimates', text: 'Free, within 24 hours. What we quote is what you pay.' },
+  { icon: 'seal-check', title: '10-year workmanship warranty', text: 'If something we installed fails, we come back and make it right.' },
+  { icon: 'umbrella', title: 'Insurance claims', text: 'We document storm damage and work with your adjuster.' },
+];
 ---
 
 <section class="about" id="about">
   <div class="container">
+    <div class="photo">
+      <Image
+        src={crewPhoto}
+        alt="Our crew finishing a new gray architectural shingle roof on a suburban home"
+        widths={[640, 960, 1280, 1600, 2000]}
+        sizes="(min-width: 1240px) 1240px, 92vw"
+        class="photo-img"
+      />
+    </div>
+
     <div class="grid">
       <div class="copy">
-        <span class="eyebrow">Our story</span>
-        <h2 class="section-title">
-          A family business built on <span class="text-accent">craftsmanship</span>.
-        </h2>
+        <h2 class="section-title">Who you’ll be working with</h2>
         <p>
-          For over a decade, William Ferman and his team have been protecting homes across the
-          DMV with honest work, fair pricing, and a commitment to doing the job right the first
-          time.
+          {owner.name} started Professional Construction in {site.founded}. Since then his team has
+          been replacing roofs, siding and gutters on homes across Maryland, DC and Virginia.
         </p>
         <p>
-          We&rsquo;re not the biggest contractor in town — we&rsquo;re the one your neighbors
-          actually recommend. Every project, big or small, gets the same care and crew.
+          We are a small company. When you call, you talk to {owner.name.split(' ')[0]} or to our
+          manager, {manager.name}, not a call center.
         </p>
-
-        <ul class="reasons">
-          <li>
-            <span class="num">01</span>
-            <div>
-              <h4>Licensed, bonded, and insured</h4>
-              <p>
-                Licensed in DC ({site.licenses[0].number}), MD ({site.licenses[1].number}),
-                and Plumbing ({site.licenses[2].number}) — fully credentialed for every job.
-              </p>
-            </div>
-          </li>
-          <li>
-            <span class="num">02</span>
-            <div>
-              <h4>One contractor, every trade</h4>
-              <p>Roofing, siding, gutters, and interior — managed by one team and one schedule.</p>
-            </div>
-          </li>
-          <li>
-            <span class="num">03</span>
-            <div>
-              <h4>10-year workmanship warranty</h4>
-              <p>We stand behind every nail. If there&rsquo;s an issue, we make it right.</p>
-            </div>
-          </li>
-        </ul>
       </div>
 
-      <div class="image-wrap">
-        <Image
-          src={hero02}
-          alt="Premium brick home featuring quality roofing and exterior work"
-          widths={[600, 900, 1200]}
-          sizes="(min-width: 900px) 540px, 100vw"
-          class="image"
-        />
-        <span class="badge">EST. 2012</span>
-      </div>
+      <ul class="promises" role="list">
+        {
+          promises.map((p) => (
+            <li>
+              <Icon name={p.icon} size={26} class="icon" />
+              <div>
+                <h3>{p.title}</h3>
+                <p>{p.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </div>
 </section>
 
 <style>
   .about {
-    background: var(--color-primary);
-    color: #fff;
+    background: var(--color-bg);
     padding: 6rem 0;
-    position: relative;
-    overflow: hidden;
   }
 
-  .about::before {
-    content: '';
-    position: absolute;
-    top: -120px;
-    right: -120px;
-    width: 420px;
-    height: 420px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(96, 165, 250, 0.25), transparent 70%);
-    pointer-events: none;
+  .photo {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 16 / 8;
+    background: var(--color-bg-soft);
+    margin-bottom: 3.5rem;
+  }
+
+  .photo :global(.photo-img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 72%;
+    display: block;
   }
 
   .grid {
     display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 4.5rem;
-    align-items: center;
-    position: relative;
-  }
-
-  .copy .eyebrow {
-    color: var(--color-accent-soft);
-  }
-
-  .copy .section-title {
-    color: #fff;
-    margin-bottom: 1.5rem;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: 4rem;
+    align-items: start;
   }
 
   .copy p {
-    color: rgba(255, 255, 255, 0.82);
-    font-size: 1.05rem;
+    color: var(--color-text-soft);
+    font-size: 1.08rem;
     line-height: 1.7;
-    margin-bottom: 1.1rem;
+    max-width: 58ch;
+    margin-bottom: 1rem;
   }
 
-  .reasons {
+  .promises {
     list-style: none;
-    margin-top: 2.5rem;
+    display: grid;
+    gap: 1.6rem;
+    padding-top: 0.4rem;
   }
 
-  .reasons li {
+  .promises li {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 1.2rem;
-    padding: 1.4rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    gap: 1rem;
   }
 
-  .reasons li:first-child {
-    border-top: 0;
-    padding-top: 0;
+  .promises :global(.icon) {
+    color: var(--color-accent);
+    margin-top: 0.1rem;
   }
 
-  .num {
-    font-family: var(--font-heading);
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: var(--color-accent-soft);
-    line-height: 1;
+  .promises h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.2rem;
   }
 
-  .reasons h4 {
-    font-family: var(--font-heading);
-    font-size: 1.1rem;
-    color: #fff;
-    margin-bottom: 0.3rem;
-  }
-
-  .reasons p {
-    font-size: 0.93rem;
-    color: rgba(255, 255, 255, 0.75);
-    margin: 0;
-  }
-
-  .image-wrap {
-    position: relative;
-    aspect-ratio: 4 / 5;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-    border: 4px solid rgba(255, 255, 255, 0.92);
-  }
-
-  .image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .badge {
-    position: absolute;
-    bottom: -22px;
-    left: -22px;
-    background: var(--color-accent);
-    color: #fff;
-    padding: 1rem 1.4rem;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    font-size: 1rem;
-    border-radius: var(--radius);
+  .promises p {
+    color: var(--color-text-soft);
+    font-size: 0.95rem;
+    line-height: 1.55;
   }
 
   @media (max-width: 900px) {
+    .about {
+      padding: 4rem 0;
+    }
+    .photo {
+      aspect-ratio: 4 / 3;
+      margin-bottom: 2.5rem;
+    }
+    .photo :global(.photo-img) {
+      object-position: 40% 80%;
+    }
     .grid {
       grid-template-columns: 1fr;
-      gap: 3rem;
-    }
-    .image-wrap {
-      max-width: 500px;
-      margin-inline: auto;
+      gap: 2.5rem;
     }
   }
 </style>
