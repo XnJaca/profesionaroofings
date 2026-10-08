@@ -6,6 +6,10 @@ export default defineConfig({
   site: 'https://pcdmv.com',
   output: 'static',
   adapter: vercel(),
+  // Many tools look for /sitemap.xml; the integration writes sitemap-index.xml.
+  redirects: {
+    '/sitemap.xml': '/sitemap-index.xml',
+  },
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/api/'),
